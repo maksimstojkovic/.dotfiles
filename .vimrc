@@ -52,7 +52,7 @@ nnoremap gV `[v`]
 augroup configgroup
     autocmd!
     autocmd VimEnter * highlight clear SignColumn
-    autocmd BufWritePre *.py,*.js,*.txt,*.sh,*.java,*.md
+    autocmd BufWritePre *.py,*.js,*.txt,*.sh,*.java,*.md,*.rmd
 		\ :call StripTrailingWhitespaces()
 augroup END
 
