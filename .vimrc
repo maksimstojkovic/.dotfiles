@@ -8,6 +8,9 @@ endif
 " enable syntax processing
 syntax enable               " handled automatically by vim-plug
 
+" enable filetype detection
+filetype on
+
 " automatically load file changes
 set autoread
 
@@ -110,6 +113,13 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+" filetypes for bullet point automation
+let g:bullets_enabled_file_types = [
+	\ 'markdown',
+	\ 'rmarkdown',
+	\ 'text'
+	\]
+
 " install vim-plug plugins
 call plug#begin('~/.vim/bundle')
 
@@ -117,6 +127,7 @@ call plug#begin('~/.vim/bundle')
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'dkarter/bullets.vim'
 
 call plug#end()
 
