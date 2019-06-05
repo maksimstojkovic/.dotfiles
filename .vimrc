@@ -113,7 +113,7 @@ endif
 " install vim-plug plugins
 call plug#begin('~/.vim/bundle')
 
-" R-mardown plugins
+" R-markdown plugins
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
