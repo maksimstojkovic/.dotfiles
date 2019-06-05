@@ -120,6 +120,23 @@ let g:bullets_enabled_file_types = [
 	\ 'text'
 	\]
 
+" Automating C compilation and running of C programs
+autocmd filetype c nnoremap <F4> :w <bar> exec '!gcc -Wall -Werror '.shellescape('%').' -o '.shellescape('%:r').' -pthread && ./'.shellescape('%:r')<CR>
+
+"auto close {
+function! s:CloseBracket()
+	let line = getline('.')
+	if line =~# '^\s*\(struct\|class\|enum\) '
+		return "{\<Enter>};\<Esc>O"
+	elseif searchpair('(', '', ')', 'bmn', '', line('.'))
+		" Probably inside a function call. Close it off.
+		return "{\<Enter>});\<Esc>O"
+	else
+		return "{\<Enter>}\<Esc>O"
+	endif
+endfunction
+inoremap <expr> {<Enter> <SID>CloseBracket()
+
 " install vim-plug plugins
 call plug#begin('~/.vim/bundle')
 
@@ -128,6 +145,9 @@ Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
 Plug 'dkarter/bullets.vim'
+
+" C plugins
+Plug 'Valloric/YouCompleteMe'
 
 call plug#end()
 
