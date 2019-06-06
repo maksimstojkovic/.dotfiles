@@ -64,8 +64,8 @@ set autoindent
 " remove trailing whitespaces
 augroup ws
 	autocmd!
-	autocmd FileType c,cpp,java,php,js,json,css,scss,sass,py,rb,coffee,python,twig,xml,yml,rmarkdown,markdown
-		\ autocmd BufWritePre <buffer> :call setline(1p(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
+	autocmd BufWritePre *.c,*.cpp,*.php,*.py,*.js,*.txt,*.sh,*.java,*.md,*.Rmd
+				\ :call StripTrailingWhitespaces()
 augroup end
 
 " set leader to comma
@@ -73,6 +73,7 @@ let mapleader=","
 
 " allow copy paste between programs
 set clipboard^=unnamedplus
+
 
 " =============================================================================
 " UI Config
@@ -151,6 +152,31 @@ command Chmodx :!chmod a+x %
 " fix syntax highlighting
 command FixSyntax :syntax sync fromstart
 
+" auto close curly braces
+function! s:CloseBracket()
+	let line = getline('.')
+	if line =~# '^\s*\(struct\|class\|enum\) '
+		return "{\<Enter>};\<Esc>O"
+	elseif searchpair('(', '', ')', 'bmn', '', line('.'))
+		" Probably inside a function call. Close it off.
+		return "{\<Enter>});\<Esc>O"
+	else
+		return "{\<Enter>}\<Esc>O"
+	endif
+endfunction
+inoremap <expr> {<Enter> <SID>CloseBracket()
+
+" strips trailing whitespace at the end of all lines
+function! StripTrailingWhitespaces()
+	" save last search & cursor position
+	let _s=@/
+	let l = line(".")
+	let c = col(".")
+	%s/\s\+$//e
+	let @/=_s
+	call cursor(l, c)
+endfunction
+
 " =============================================================================
 " Vim-Plug Config
 " =============================================================================
@@ -182,6 +208,12 @@ Plug 'w0rp/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+
+" r-markdown
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'dkarter/bullets.vim'
 
 " styling
 Plug 'xero/nerdtree'
@@ -243,11 +275,20 @@ if has('nvim')
 	inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 endif
 
+" r-markdown plugin readability
+let g:pandoc#modules#disabled = ["folding", "spell"]
+let g:pandoc#syntax#conceal#use = 0
+
+" bullet point automation filetypes
+let g:bullets_enabled_file_types = [
+	\ 'markdown', 'rmarkdown', 'text'
+\]
+
 " linting
 let g:ale_completion_enabled = 1
 let g:ale_sign_column_always = 1
-let g:ale_sign_error = '✘ '
-let g:ale_sign_warning = '⚠'
+let g:ale_sign_error = 'X'
+let g:ale_sign_warning = '!'
 "let g:ale_open_list = 1
 "let g:ale_lint_on_text_changed = 'never'
 highlight ALEErrorSign ctermbg=NONE ctermfg=magenta
