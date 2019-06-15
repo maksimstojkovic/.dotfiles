@@ -1,72 +1,32 @@
-" GENERAL CONFIG
+" Basic Settings
 
-" use vim settings, not vi
+" Set compatibility
 set nocompatible
 
-" hide buffers instead of closing them
-set hidden
-
-" maintain undo history between sessions
+" maintain undo history
 set undofile
 set undodir=~/.vim/undo
 set noswapfile
 
-" fuzzy finding
-set path+=**
-
-"lazy file name tab completion
-set wildmode=longest,list,full
-set wildmenu
-set wildignorecase
-
-" ignore files unused by vim
-set wildignore+=.git,.hg,.svn
-set wildignore+=*.aux,*.out,*.toc
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.rbc,*.class
-set wildignore+=*.ai,*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.psd,*.webp
-set wildignore+=*.avi,*.divx,*.mp4,*.webm,*.mov,*.m2ts,*.mkv,*.vob,*.mpg,*.mpeg
-set wildignore+=*.mp3,*.oga,*.ogg,*.wav,*.flac
-set wildignore+=*.eot,*.otf,*.ttf,*.woff
-set wildignore+=*.doc,*.pdf,*.cbr,*.cbz
-set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz,*.kgb
-set wildignore+=*.swp,.lock,.DS_Store,._*
+" search highlighting
+set hlsearch
+set incsearch
 
 " allow case insensitive search
 set ignorecase
 set smartcase
 set infercase
 
-" fix backspace behaviour
+" make backspace behave as expected
 set backspace=indent,eol,start
 
-" searching
-set hlsearch
-set incsearch
-if has("nvim")
-	set inccommand=split
-endif
-
-" use indents of 4 spaces
+" indentation settings
 set shiftwidth=4
-
-" tabs are hard tabs
-set noexpandtab
-
-" an indentation every four columns
 set tabstop=4
-
-" let backspace delete indents
 set softtabstop=4
-
-" enable auto indentation
+set noexpandtab
 set autoindent
-
-" remove trailing whitespaces
-augroup ws
-	autocmd!
-	autocmd BufWritePre *.c,*.cpp,*.php,*.py,*.js,*.txt,*.sh,*.java,*.md,*.Rmd
-				\ :call StripTrailingWhitespaces()
-augroup end
+set smartindent " might have to remove
 
 " set leader to comma
 let mapleader=","
@@ -74,10 +34,14 @@ let mapleader=","
 " allow copy paste between programs
 set clipboard^=unnamedplus
 
+" remove trailing whitespaces on write
+augroup ws
+	autocmd!
+	autocmd BufWritePre *.c,*.cpp,*.php,*.py,*.js,*.txt,*.sh,*.java,*.md,*.Rmd
+				\ :call StripTrailingWhitespaces()
+augroup end
 
-" =============================================================================
 " UI Config
-" =============================================================================
 
 " show matching brackets/parenthesis
 set showmatch
@@ -86,41 +50,28 @@ set showmatch
 set shortmess+=I
 
 " syntax highlighting
+filetype plugin on
 syntax on;
 set synmaxcol=512
-filetype plugin on
 
 " show line numbers
 set number
 set relativenumber
 
-" no line wrapping
-" set nowrap
-
-" no folding
-set nofoldenable
-set foldlevel=99
-set foldminlines=99
-set foldlevelstart=99
-
 " highlight cursor
 set cursorline
 
+" enable mouse
+set mouse=a
+
 " show invisibles
 set list
-set listchars=tab:>\ ,trail:~,extends:>,precedes:<,nbsp:+
+set listchars=tab:»\ ,trail:~,extends:>,precedes:<,nbsp:+
 
 " split style
 set fillchars=vert:▒
 
-" tree style file explorer
-let g:netrw_liststyle=3
-let g:netrw_browse_split=4
-let g:netrw_winsize=25
-
-" =============================================================================
-" Functions
-" =============================================================================
+" Functions and Key Mappings
 
 " escape in insert mode
 inoremap <leader>m <esc>
@@ -135,22 +86,6 @@ nnoremap gV `[v`]
 " fix vertical navigation
 nnoremap j gj
 nnoremap k gk
-
-" remove trailing white space
-command Nows :%s/\s\+$//
-
-" remove blank lines
-command Nobl :g/^\s*$/d
-
-" toggle spellcheck
-command Spell :setlocal spell! spell?
-nnoremap <silent> <leader>s :setlocal spell! spell?
-
-" make current buffer executable
-command Chmodx :!chmod a+x %
-
-" fix syntax highlighting
-command FixSyntax :syntax sync fromstart
 
 " auto close curly braces
 function! s:CloseBracket()
@@ -177,9 +112,7 @@ function! StripTrailingWhitespaces()
 	call cursor(l, c)
 endfunction
 
-" =============================================================================
-" Vim-Plug Config
-" =============================================================================
+" Plugins
 
 " install vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -195,19 +128,13 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " colour schemes
-Plug 'xero/sourcerer.vim'
-Plug 'xero/blaquemagick.vim'
-Plug 'xero/vim-noctu'
-Plug 'xero/nord-vim-mod'
 Plug 'sjl/badwolf'
 
 " programming
-Plug 'shougo/deoplete.nvim', has('nvim') ? {} : { 'do': [ ':UpdateRemotePlugins', ':set runtimepath+=~/.vim/plugged/deoplete.nvim/' ]}
-Plug 'ajh17/VimCompletesMe'
 Plug 'w0rp/ale'
-Plug 'sheerun/vim-polyglot'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
 
 " r-markdown
 Plug 'vim-pandoc/vim-pandoc'
@@ -215,65 +142,20 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
 Plug 'dkarter/bullets.vim'
 
-" styling
-Plug 'xero/nerdtree'
-Plug 'itchyny/lightline.vim'
-Plug 'ryanoasis/vim-devicons'
-Plug 'chrisbra/colorizer'
-Plug 'chrisbra/unicode.vim'
-Plug 'powerman/vim-plugin-AnsiEsc'
 
 " features
 Plug 'matze/vim-move'
 Plug 'godlygeek/tabular'
-Plug 'tpope/tpope-vim-abolish'
-Plug 'xero/securemodelines'
-Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-Plug 'junegunn/limelight.vim', { 'on': 'Goyo' }
-Plug 'majutsushi/tagbar', { 'on': 'Tagbar' }
-Plug 'junegunn/gv.vim', { 'on': 'GV' }
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+Plug 'kien/ctrlp.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline'
 
-call plug#end()
+cal plug#end()
 
-" =============================================================================
-" Plugin Config
-" =============================================================================
+" Plugin Settings
 
 " set colour scheme
 colorscheme badwolf
-
-" omnifuncs
-augroup omnifuncs
-	au!
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType htmlrkdown setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-	autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
-augroup end
-
-" completions
-let b:vcm_tab_complete = 'omni'
-set omnifunc=syntaxcomplete#Complete
-" select the completion with enter
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" close preview on completion complete
-augroup completionhide
-	au!
-	autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-augroup end
-
-if has('nvim')
-	let g:deoplete#enable_at_startup = 1
-	" let g:deoplete#disable_auto_complete = 1
-	let g:deoplete#enable_ignore_case = 1
-	if !exists('g:deoplete#omni#input_patterns')
-		let g:deoplete#omni#input_patterns = {}
-	endif
-	inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-endif
 
 " r-markdown plugin readability
 let g:pandoc#modules#disabled = ["folding", "spell"]
@@ -284,199 +166,29 @@ let g:bullets_enabled_file_types = [
 	\ 'markdown', 'rmarkdown', 'text'
 \]
 
-" linting
-let g:ale_completion_enabled = 1
-let g:ale_sign_column_always = 1
-let g:ale_sign_error = 'X'
-let g:ale_sign_warning = '!'
-"let g:ale_open_list = 1
-"let g:ale_lint_on_text_changed = 'never'
-highlight ALEErrorSign ctermbg=NONE ctermfg=magenta
-highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+" use {H,J,K,L} to move lines
+let g:move_key_modifier = 'S'
 
-" file browser
-let NERDTreeShowHidden = 1
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-let g:webdevicons_enable_nerdtree = 1
-let g:NERDTreeDirArrowExpandable = ''
-let g:NERDTreeDirArrowCollapsible = ''
-
-
-" disable folding
-let g:vim_json_syntax_conceal = 0
-
-" verticle diffs
-set diffopt+=vertical
-
-" close if final buffer is netrw or the quickfix
-augroup finalcountdown
-	au!
-	"autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw" || &buftype == 'quickfix' |q|endif
-	autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) || &buftype == 'quickfix' | q | endif
-	"nmap - :Lexplore<cr>
-	nmap - :NERDTreeToggle<cr>
-augroup END
-
-" speed optimizations
+" gitgutter settings
 let g:gitgutter_realtime = 1
 let g:gitgutter_eager = 1
 let g:gitgutter_max_signs = 1500
 let g:gitgutter_diff_args = '-w'
-" custom symbols
+
+" gitgutter custom symbols
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = '~'
 let g:gitgutter_sign_removed = '-'
 let g:gitgutter_sign_removed_first_line = '^'
 let g:gitgutter_sign_modified_removed = ':'
-" color overrrides
+
+" gitgutter color overrrides
 highlight clear SignColumn
 highlight GitGutterAdd ctermfg=green ctermbg=0
 highlight GitGutterChange ctermfg=yellow ctermbg=0
 highlight GitGutterDelete ctermfg=red ctermbg=0
 highlight GitGutterChangeDelete ctermfg=red ctermbg=0
 
-" use {H,J,K,L} to move lines
-let g:move_key_modifier = 'S'
-
-" limit modelines
-set nomodeline
-let g:secure_modelines_verbose = 0
-let g:secure_modelines_modelines = 15
-
-" distraction free writing mode
-let g:limelight_conceal_ctermfg = 240
-function! s:goyo_enter()
-	Limelight
-	silent !tmux set status off
-	silent !tmux list-panes -F '\#F' | grep -q Z | tmux resize-pane -Z
-	set noshowmode
-	set noshowcmd
-	set wrap
-	set scrolloff=999
-endfunction
-
-function! s:goyo_leave()
-	Limelight!
-	silent !tmux set status on
-	silent !tmux list-panes -F '\#F' | grep -q Z && tmux
-	resize-pane -Z
-	set showmode
-	set showcmd
-	set nowrap
-	set scrolloff=0
-endfunction
-
-augroup goyoactions
-	au!
-	autocmd! User GoyoEnter nested call <SID>goyo_enter()
-	autocmd! User GoyoLeave nested call <SID>goyo_leave()
-augroup end
-
-" light line settings
-let s:base03 = [ '#151513', 233 ]
-let s:base02 = [ '#303030', 0 ]
-let s:base01 = [ '#4e4e43', 239 ]
-let s:base00 = [ '#666656', 242  ]
-let s:base0 = [ '#808070', 244 ]
-let s:base1 = [ '#949484', 242 ]
-let s:base2 = [ '#a8a897', 248 ]
-let s:base3 = [ '#e8e8d3', 253 ]
-let s:yellow = [ '#7A7A57', 11 ]
-let s:orange = [ '#7A7A57', 3 ]
-let s:red = [ '#D68787', 131 ]
-let s:magenta = [ '#8181A6', 13 ]
-let s:peach = [ '#D7AFAF', 181 ]
-let s:green = [ '#7A7A57', 3 ]
-let s:none = [ 'none', 'none' ]
-
-let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
-let s:p.normal.left = [ [ s:base02, s:peach ], [ s:base3, s:base01 ] ]
-let s:p.normal.right = [ [ s:base02, s:base1 ], [ s:base2, s:base01 ] ]
-let s:p.inactive.right = [ [ s:base02, s:base00 ], [ s:base0, s:base02 ] ]
-let s:p.inactive.left =  [ [ s:base0, s:base02 ], [ s:base00, s:base02 ] ]
-let s:p.insert.left = [ [ s:base02, s:magenta ], [ s:base3, s:base01 ] ]
-let s:p.replace.left = [ [ s:base02, s:red ], [ s:base3, s:base01 ] ]
-let s:p.visual.left = [ [ s:base02, s:green ], [ s:base3, s:base01 ] ]
-let s:p.normal.middle = [ [ s:none, s:none ] ]
-let s:p.inactive.middle = copy(s:p.normal.middle)
-let s:p.tabline.left = [ [ s:base3, s:base00 ] ]
-let s:p.tabline.tabsel = [ [ s:base3, s:base02 ] ]
-let s:p.tabline.middle = copy(s:p.normal.middle)
-let s:p.tabline.right = copy(s:p.normal.right)
-let s:p.normal.error = [ [ s:base02, s:yellow ] ]
-let s:p.normal.warning = [ [ s:yellow, s:base01 ] ]
-
-let g:lightline#colorscheme#nord#palette = lightline#colorscheme#flatten(s:p)
-
-set laststatus=2
-let g:lightline = {
-  \ 'colorscheme': 'nord',
-  \ 'active': {
-  \   'left': [ [ 'filename' ],
-  \             [ 'linter',  'gitbranch' ] ],
-  \   'right': [ [ 'percent', 'lineinfo' ],
-  \              [ 'fileencoding', 'filetype' ] ]
-  \ },
-  \ 'component_function': {
-  \   'modified': 'WizMod',
-  \   'readonly': 'WizRO',
-  \   'gitbranch': 'WizGit',
-  \   'filename': 'WizName',
-  \   'filetype': 'WizType',
-  \   'fileencoding': 'WizEncoding',
-  \   'mode': 'WizMode',
-  \ },
-  \ 'component_expand': {
-  \   'linter': 'WizErrors',
-  \ },
-  \ 'component_type': {
-  \   'readonly': 'error',
-  \   'linter': 'error'
-  \ },
-  \ 'separator': { 'left': '▓▒░', 'right': '░▒▓' },
-  \ 'subseparator': { 'left': '▒', 'right': '░' }
-  \ }
-
-function! WizMod()
-	return &ft =~ 'help\|vimfiler' ? '' : &modified ? '» ' : &modifiable ? '' : ''
-endfunction
-
-function! WizRO()
-	" ×   
-	return &ft !~? 'help\|vimfiler' && &readonly ? ' ' : ''
-endfunction
-
-function! WizGit()
-	return !IsTree() ? exists('*fugitive#head') ? fugitive#head() : '' : ''
-endfunction
-
-function! WizName()
-	return !IsTree() ? ('' != WizRO() ? WizRO() : WizMod()) . ('' != expand('%:t') ? expand('%:t') : '[none]') : ''
-endfunction
-
-function! WizType()
-	return winwidth(0) > 70 ? (strlen(&filetype) ? ' ' . WebDevIconsGetFileTypeSymbol() . ' ' . &filetype : '') : ''
-endfunction
-
-function! WizEncoding()
-	return winwidth(0) > 70 ? (strlen(&fenc) ? &enc : &enc) : ''
-endfunction
-
-function! WizErrors() abort
-	let l:counts = ale#statusline#Count(bufnr(''))
-	" ×   
-	return l:counts.total == 0 ? '' : printf(' %d', l:counts.total)
-endfunction
-
-function! IsTree()
-	let l:name = expand('%:t')
-	return l:name =~ 'NetrwTreeListing\|undotree\|NERD' ? 1 : 0
-endfunction
-
-" linter status
-augroup alestatus
-	au!
-	autocmd User ALELint call lightline#update()
-augroup end
+" powerline fonts
+let g:airline_powerline_fonts = 1
 
