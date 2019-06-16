@@ -53,7 +53,7 @@ echo "source ~/.vimrc" >> $home/.config/nvim/init.vim
 if [ "$dot_dir_path" != "$home/.dotfiles" ]; then
 	echo "Moving files"
 	cd $home
-	mv -v $dir $home/.dotfiles
+	mv -v $dot_dir_path $home/.dotfiles
 	echo "Moving files DONE"
 fi
 
@@ -62,6 +62,6 @@ ln -sfn $home/.dotfiles/.vimrc $home/.vimrc
 
 # install vim-plug and all plugins in .vimrc
 echo "Installing vim plugins"
-vim +"PlugInstall | q! | q!" vim-plug-setup.txt --headless
+vim +"PlugInstall | q! | q!" /dev/null --headless
 echo "Installing vim plugins DONE"
 
