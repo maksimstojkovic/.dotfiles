@@ -32,7 +32,7 @@ set smartindent " might have to remove
 let mapleader=","
 
 " allow copy paste between programs
-set clipboard^=unnamedplus
+set clipboard+=unnamedplus
 
 " remove trailing whitespaces on write
 augroup ws
@@ -114,15 +114,15 @@ endfunction
 
 " Plugins
 
-" install vim-plug
+" install vim-plug (unix compatible only)
 if empty(glob('~/.vim/autoload/plug.vim'))
 	silent call system('mkdir -p ~/.vim/{autoload,bundle,cache,undo,backups,swaps}')
 	silent call system('curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
 	execute 'source  ~/.vim/autoload/plug.vim'
-	augroup plugsetup
-		au!
-		autocmd VimEnter * PlugInstall
-	augroup end
+	" augroup plugsetup
+	" 	au!
+	" 	autocmd VimEnter * PlugInstall
+	" augroup end
 endif
 
 call plug#begin('~/.vim/plugged')
@@ -148,14 +148,16 @@ Plug 'matze/vim-move'
 Plug 'godlygeek/tabular'
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'vim-airline/vim-airline'
+Plug 'powerline/powerline'
 
 call plug#end()
 
 " Plugin Settings
 
 " set colour scheme
-colorscheme badwolf
+if isdirectory('~/.vim/plugged/badwolf')
+	colorscheme badwolf
+endif
 
 " r-markdown plugin readability
 let g:pandoc#modules#disabled = ["folding", "spell"]
