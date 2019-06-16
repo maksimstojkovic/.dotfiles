@@ -187,6 +187,11 @@ highlight GitGutterChange ctermfg=yellow ctermbg=0
 highlight GitGutterDelete ctermfg=red ctermbg=0
 highlight GitGutterChangeDelete ctermfg=red ctermbg=0
 
-" powerline fonts
-let g:airline_powerline_fonts = 1
+" powerline bindings
+set rtp+=$HOME/.local/lib/python3.5/site-packages/powerline/bindings/vim/
 
+" show powerline status bar
+set laststatus=2
+
+" use 256 colours (only if terminal supports 256 colours)
+set t_Co=256
