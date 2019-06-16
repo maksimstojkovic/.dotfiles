@@ -150,7 +150,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 
-cal plug#end()
+call plug#end()
 
 " Plugin Settings
 
