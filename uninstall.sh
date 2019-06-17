@@ -1,2 +1,2 @@
-sudo rm /usr/local/bin/nvim
-sudo rm -r /usr/local/share/nvim/
+sudo rm -f /usr/local/bin/nvim
+sudo rm -rf /usr/local/share/nvim/
