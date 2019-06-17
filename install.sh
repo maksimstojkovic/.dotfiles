@@ -16,27 +16,38 @@ if [ ! -z "$dot_dir_path" ]; then
 fi
 dot_dir_path="$PWD$dot_dir_path"
 home=$HOME
+echo "Home path: $home"
+echo "Dotfiles path: $dot_dir_path"
 
-# install neovim from source
-echo "Installing neovim from source"
+# determine linux distro
+distro=$(cat /etc/*release | grep -oP '\bID=.*\b' | sed 's/ID=//')
+echo "Distro: $distro"
+
+# installing neovim
+echo "Installing neovim"
 sudo apt-get update
-# sudo apt-get remove -y python python-dev python3 python3-dev
-# sudo apt-get autoremove -y
-sudo apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip libncurses5-dev libgnome2-dev libgnomeui-dev libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev ruby-dev lua5.1 liblua5.1-dev libperl-dev python python-dev python3 python3-dev python-pip
-#: <<'END'
-cd $dot_dir_path
-git clone https://github.com/neovim/neovim
-cd neovim
-git checkout stable
-make CMAKE_BUILD_TYPE=Release
-sudo make install
-cd ..
-rm -rf neovim
-# neovim is installed to /usr/local/bin, and can be uninstalled in the future using:
-# sudo rm /usr/local/bin/nvim
-# sudo rm -r /usr/local/share/nvim/
-pip install --user neovim
-echo "Installing neovim from source DONE"
+sudo apt-get remove neovim
+rm -rf ~/.vim
+if [ "$distro" == "ubuntu" ]; then
+	sudo apt-get install -y software-properties-common
+	sudo add-apt-repository ppa:neovim-ppa/stable
+	sudo apt-get update
+	sudo apt-get install -y neovim
+	sudo apt-get install -y python-dev python-pip python-neovim python3-dev python3-pip python3-neovim
+elif [ "$distro" == "raspbian" ]; then
+	sudo apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+	sudo apt-get install -y python python-dev python3 python3-dev python-pip
+	cd $dot_dir_path
+	git clone https://github.com/neovim/neovim
+	cd neovim
+	git checkout stable
+	make CMAKE_BUILD_TYPE=RelWithDebInfo
+	sudo make install
+	cd ..
+	rm -rf neovim
+	pip install --user neovim
+fi
+echo "Installing neovim DONE"
 
 # add neovim to alternatives list
 echo "Updating default editors"
@@ -44,7 +55,6 @@ sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
 sudo update-alternatives --install /usr/bin/vim vim /usr/local/bin/nvim 60
 sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/nvim 60
 echo "Updating default editors DONE"
-#END
 
 # create init.vim file which points to .vimrc in home directory
 mkdir -p $home/.config/nvim
@@ -65,6 +75,5 @@ ln -sfn $home/.dotfiles/.vimrc $home/.vimrc
 
 # install vim-plug and all plugins in .vimrc
 echo "Installing vim plugins"
-vim +"PlugInstall | q! | q!" ~/temp.vim --headless
+	vim +"PlugInstall | q! | q!" ~/temp.vim --headless
 echo "Installing vim plugins DONE"
-

@@ -144,14 +144,15 @@ Plug 'matze/vim-move'
 Plug 'godlygeek/tabular'
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'powerline/powerline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
 " Plugin Settings
 
 " set colour scheme
-if isdirectory('~/.vim/plugged/badwolf')
+if !empty(glob('~/.vim/plugged/badwolf/colors/badwolf.vim'))
 	colorscheme badwolf
 endif
 
@@ -187,11 +188,5 @@ highlight GitGutterChange ctermfg=yellow ctermbg=0
 highlight GitGutterDelete ctermfg=red ctermbg=0
 highlight GitGutterChangeDelete ctermfg=red ctermbg=0
 
-" powerline bindings
-set rtp+=$HOME/.local/lib/python3.5/site-packages/powerline/bindings/vim/
-
-" show powerline status bar
-set laststatus=2
-
-" use 256 colours (only if terminal supports 256 colours)
-set t_Co=256
+" airline settings
+let g:airline_powerline_fonts = 1
