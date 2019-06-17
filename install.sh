@@ -77,3 +77,12 @@ ln -sfn $home/.dotfiles/.vimrc $home/.vimrc
 echo "Installing vim plugins"
 	vim +"PlugInstall | q! | q!" ~/temp.vim --headless
 echo "Installing vim plugins DONE"
+
+# setting up vim-airline
+# more instructions here https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
+# On Windows, install all of the source code pro fonts from here https://github.com/powerline/fonts/tree/master/SourceCodePro
+# On Windows the terminal font should also be changed to source code pro
+cd $home/.dotfiles
+git clone https://github.com/powerline/fonts.git --depth=1
+fonts/install.sh
+rm -rf fonts

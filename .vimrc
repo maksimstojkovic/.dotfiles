@@ -190,3 +190,4 @@ highlight GitGutterChangeDelete ctermfg=red ctermbg=0
 
 " airline settings
 let g:airline_powerline_fonts = 1
+set guifont=Source\ Code\ Pro\ for\ Powerline:h15:cANSI
