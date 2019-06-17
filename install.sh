@@ -26,13 +26,15 @@ echo "INFO: Distro: $distro"
 # move folder to ~/.dotfiles
 if [ "$dot_dir_path" != "$home/.dotfiles" ]; then
 	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles"
-	mkdir -p $home/.dotfiles
-	cp -v $dot_dir_path/* $home/.dotfiles
+	rm -v -rf $home/.dotfiles
+	mkdir -v -p $home/.dotfiles
+	cp -v -a $dot_dir_path/. $home/.dotfiles
 	cd $home/.dotfiles
 	rm -v -rf $dot_dir_path
 	dot_dir_path=$home/.dotfiles
 	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles DONE"
 fi
+exit 1
 
 # installing neovim
 echo "INFO: Installing neovim"
