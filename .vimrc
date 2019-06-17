@@ -193,6 +193,7 @@ highlight GitGutterChangeDelete ctermfg=red ctermbg=0
 " airline settings (requires patched source code pro powerline font installed)
 let g:airline_powerline_fonts = 1
 set guifont=Source\ Code\ Pro\ for\ Powerline:h15:cANSI
+let g:airline_theme='jellybeans'
 
 " airline fallback symbols
 if !exists('g:airline_symbols')
@@ -227,5 +228,4 @@ let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = '☰'
-let g:airline_symbols.maxlinenr = ''
-
+let g:airline_symbols.maxlinenr = '' "  removed for readability
