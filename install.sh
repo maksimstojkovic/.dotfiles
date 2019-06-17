@@ -26,11 +26,11 @@ echo "INFO: Distro: $distro"
 # installing neovim
 echo "INFO: Installing neovim"
 sudo apt-get update
-sudo apt-get remove neovim
+sudo apt-get remove -y neovim
 rm -rf ~/.vim
 if [ "$distro" == "ubuntu" ]; then
 	sudo apt-get install -y software-properties-common
-	sudo add-apt-repository ppa:neovim-ppa/stable
+	sudo add-apt-repository -y ppa:neovim-ppa/stable
 	sudo apt-get update
 	sudo apt-get install -y neovim
 	sudo apt-get install -y python-dev python-pip python-neovim python3-dev python3-pip python3-neovim
@@ -51,9 +51,15 @@ echo "INFO: Installing neovim DONE"
 
 # add neovim to alternatives list
 echo "INFO: Updating default editors"
-sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
-sudo update-alternatives --install /usr/bin/vim vim /usr/local/bin/nvim 60
-sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/nvim 60
+if [ "$distro" == "ubuntu" ]; then
+	sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
+	sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
+	sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+elif [ "$distro" == "raspbian" ]; then
+	sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
+	sudo update-alternatives --install /usr/bin/vim vim /usr/local/bin/nvim 60
+	sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/nvim 60
+fi
 echo "INFO: Updating default editors DONE"
 
 # create init.vim file which points to .vimrc in home directory
@@ -66,10 +72,11 @@ echo "INFO: Configuring init.vim DONE"
 
 # move folder to ~/.dotfiles
 if [ "$dot_dir_path" != "$home/.dotfiles" ]; then
-	echo "INFO: Moving files to $home/.dotfiles"
-	cd $home
+	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles"
+	cd /
+	pwd
 	mv -v $dot_dir_path $home/.dotfiles
-	echo "INFO: Moving files to $home/.dotfiles DONE"
+	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles DONE"
 fi
 
 # create symbolic link to .vimrc in git repo
@@ -79,7 +86,7 @@ echo "INFO: Creating symbolic link at $home/.vimrc DONE"
 
 # install vim-plug and all plugins in .vimrc
 echo "INFO: Installing vim plugins"
-	vim +"PlugInstall | q! | q!" ~/temp.vim --headless
+vim +"PlugInstall | q! | q!" ~/$RANDOM.vim --headless
 echo "INFO: Installing vim plugins DONE"
 
 # setting up vim-airline

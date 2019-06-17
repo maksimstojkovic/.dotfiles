@@ -19,7 +19,7 @@ home=$HOME
 echo "INFO: Uninstalling neovim"
 rm -rf ~/.vim ~
 if [ "$distro" == "ubuntu" ]; then
-	sudo apt-get remove neovim
+	sudo apt-get remove -y neovim
 elif [ "$distro" == "raspbian" ]; then
 	sudo rm -f /usr/local/bin/nvim
 	sudo rm -rf /usr/local/share/nvim/
