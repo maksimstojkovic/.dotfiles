@@ -23,6 +23,17 @@ echo "INFO: Dotfiles path: $dot_dir_path"
 distro=$(cat /etc/*release | grep -oP '\bID=.*\b' | sed 's/ID=//')
 echo "INFO: Distro: $distro"
 
+# move folder to ~/.dotfiles
+if [ "$dot_dir_path" != "$home/.dotfiles" ]; then
+	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles"
+	mkdir -p $home/.dotfiles
+	cp -v $dot_dir_path/* $home/.dotfiles
+	cd $home/.dotfiles
+	rm -v -rf $dot_dir_path
+	dot_dir_path=$home/.dotfiles
+	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles DONE"
+fi
+
 # installing neovim
 echo "INFO: Installing neovim"
 sudo apt-get update
@@ -69,15 +80,6 @@ echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after" > $home/.config/nvim/in
 echo "let &packpath = &runtimepath" >> $home/.config/nvim/init.vim
 echo "source ~/.vimrc" >> $home/.config/nvim/init.vim
 echo "INFO: Configuring init.vim DONE"
-
-# move folder to ~/.dotfiles
-if [ "$dot_dir_path" != "$home/.dotfiles" ]; then
-	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles"
-	cd /
-	pwd
-	mv -v $dot_dir_path $home/.dotfiles
-	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles DONE"
-fi
 
 # create symbolic link to .vimrc in git repo
 echo "INFO: Creating symbolic link at $home/.vimrc"
