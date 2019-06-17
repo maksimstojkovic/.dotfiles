@@ -74,11 +74,10 @@ set fillchars=vert:▒
 " Functions and Key Mappings
 
 " escape in insert mode
-inoremap <leader>m <esc>
+inoremap jk <esc>
 
 " remove highligting
 nnoremap <silent> <leader><space> <esc>:nohlsearch<cr><esc>
-nnoremap <silent> <esc><esc> <esc>:nohlsearch<cr><esc>
 
 " highlight last inserted text
 nnoremap gV `[v`]
@@ -86,6 +85,9 @@ nnoremap gV `[v`]
 " fix vertical navigation
 nnoremap j gj
 nnoremap k gk
+
+" quick-save
+nnoremap <leader><leader> <esc>:w<cr><esc>
 
 " auto close curly braces
 function! s:CloseBracket()

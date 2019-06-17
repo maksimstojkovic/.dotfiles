@@ -16,15 +16,15 @@ if [ ! -z "$dot_dir_path" ]; then
 fi
 dot_dir_path="$PWD$dot_dir_path"
 home=$HOME
-echo "Home path: $home"
-echo "Dotfiles path: $dot_dir_path"
+echo "INFO: Home path: $home"
+echo "INFO: Dotfiles path: $dot_dir_path"
 
 # determine linux distro
 distro=$(cat /etc/*release | grep -oP '\bID=.*\b' | sed 's/ID=//')
-echo "Distro: $distro"
+echo "INFO: Distro: $distro"
 
 # installing neovim
-echo "Installing neovim"
+echo "INFO: Installing neovim"
 sudo apt-get update
 sudo apt-get remove neovim
 rm -rf ~/.vim
@@ -47,44 +47,49 @@ elif [ "$distro" == "raspbian" ]; then
 	rm -rf neovim
 	pip install --user neovim
 fi
-echo "Installing neovim DONE"
+echo "INFO: Installing neovim DONE"
 
 # add neovim to alternatives list
-echo "Updating default editors"
+echo "INFO: Updating default editors"
 sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
 sudo update-alternatives --install /usr/bin/vim vim /usr/local/bin/nvim 60
 sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/nvim 60
-echo "Updating default editors DONE"
+echo "INFO: Updating default editors DONE"
 
 # create init.vim file which points to .vimrc in home directory
+echo "INFO: Configuring init.vim"
 mkdir -p $home/.config/nvim
 echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after" > $home/.config/nvim/init.vim
 echo "let &packpath = &runtimepath" >> $home/.config/nvim/init.vim
 echo "source ~/.vimrc" >> $home/.config/nvim/init.vim
+echo "INFO: Configuring init.vim DONE"
 
 # move folder to ~/.dotfiles
 if [ "$dot_dir_path" != "$home/.dotfiles" ]; then
-	echo "Moving files"
+	echo "INFO: Moving files to $home/.dotfiles"
 	cd $home
 	mv -v $dot_dir_path $home/.dotfiles
-	echo "Moving files DONE"
+	echo "INFO: Moving files to $home/.dotfiles DONE"
 fi
 
 # create symbolic link to .vimrc in git repo
+echo "INFO: Creating symbolic link at $home/.vimrc"
 ln -sfn $home/.dotfiles/.vimrc $home/.vimrc
+echo "INFO: Creating symbolic link at $home/.vimrc DONE"
 
 # install vim-plug and all plugins in .vimrc
-echo "Installing vim plugins"
+echo "INFO: Installing vim plugins"
 	vim +"PlugInstall | q! | q!" ~/temp.vim --headless
-echo "Installing vim plugins DONE"
+echo "INFO: Installing vim plugins DONE"
 
 # setting up vim-airline
 # more instructions here https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
 # On Windows, install all of the source code pro fonts from here https://github.com/powerline/fonts/tree/master/SourceCodePro
 # On Windows the terminal font should also be changed to source code pro
-echo "Installing airline/powerline patched fonts"
+echo "INFO: Installing airline/powerline patched fonts"
 cd $home/.dotfiles
 git clone https://github.com/powerline/fonts.git --depth=1
 fonts/install.sh
 rm -rf fonts
-echo "Installing airline/powerline patched fonts DONE"
+echo "INFO: Installing airline/powerline patched fonts DONE"
+
