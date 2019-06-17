@@ -34,7 +34,6 @@ if [ "$dot_dir_path" != "$home/.dotfiles" ]; then
 	dot_dir_path=$home/.dotfiles
 	echo "INFO: Moving files from $dot_dir_path to $home/.dotfiles DONE"
 fi
-exit 1
 
 # installing neovim
 echo "INFO: Installing neovim"
