@@ -82,7 +82,9 @@ echo "Installing vim plugins DONE"
 # more instructions here https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
 # On Windows, install all of the source code pro fonts from here https://github.com/powerline/fonts/tree/master/SourceCodePro
 # On Windows the terminal font should also be changed to source code pro
+echo "Installing airline/powerline patched fonts"
 cd $home/.dotfiles
 git clone https://github.com/powerline/fonts.git --depth=1
 fonts/install.sh
 rm -rf fonts
+echo "Installing airline/powerline patched fonts DONE"
