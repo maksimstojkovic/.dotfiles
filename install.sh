@@ -103,3 +103,5 @@ fonts/install.sh
 rm -rf fonts
 echo "INFO: Installing airline/powerline patched fonts DONE"
 
+echo ""
+echo "To complete setup, change the font in your terminal to Source Code Pro for Powerline"
