@@ -158,6 +158,20 @@ if !empty(glob('~/.vim/plugged/badwolf/colors/badwolf.vim'))
 	colorscheme badwolf
 endif
 
+" ale linting
+let g:ale_completion_enabled = 1
+let g:ale_sign_column_always = 1
+let g:ale_lint_on_text_changed = 1
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_save = 1
+let g:ale_sign_error = 'X'
+let g:ale_sign_warning = '!'
+highlight ALEErrorSign ctermbg=0 ctermfg=magenta
+highlight ALEWarningSign ctermbg=0 ctermfg=yellow
+let g:ale_echo_msg_format = '%linter%: %s'
+let g:ale_c_clang_options = '-std=gnu11 -Wall'
+let g:ale_c_gcc_options = '-std=gnu11 -Wall'
+
 " r-markdown plugin readability
 let g:pandoc#modules#disabled = ["folding", "spell"]
 let g:pandoc#syntax#conceal#use = 0
