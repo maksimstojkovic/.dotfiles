@@ -11,20 +11,12 @@ fi
 
 home=$HOME
 bashrc="$home/.bashrc"
-bash_aliases="$home/.bash_aliases"
 
 # check if ~/.bashrc file exists
 if [ ! -f "$bashrc" ]; then
 	echo "INFO: Creating $bashrc"
 	touch $bashrc
 	echo "INFO: Creating $bashrc DONE"
-fi
-
-# check if ~/.bash_aliases file exists
-if [ ! -f "$bash_aliases" ]; then
-	echo "INFO: Creating $bash_aliases"
-	touch $bash_aliases
-	echo "INFO: Creating $bash_aliases DONE"
 fi
 
 alias_auto=$(cat $bashrc | grep "\. ~\/\.bash_aliases")
@@ -44,6 +36,11 @@ echo "INFO: Uncommenting alias file execution in .bashrc"
 hash perl 2>/dev/null || sudo apt-get install perl
 perl -i -p0e 's/.*if \[ -f ~\/\.bash_aliases \]; then\s*.*\. ~\/\.bash_aliases\s*.*fi/if \[ -f ~\/\.bash_aliases \]; then\n\t\. ~\/\.bash_aliases\nfi/g' $bashrc
 echo "INFO: Uncommenting alias file execution in .bashrc DONE"
+
+# create symbolic link to .bash_aliases file
+echo "INFO: Creating symbolic link at ~/.bash_aliases"
+ln -sfn $home/.dotfiles/.bash_aliases $home/.bash_aliases
+echo "INFO: Creating symbolic link at ~/.bash_aliases DONE"
 
 # reload .bashrc
 . $bashrc
