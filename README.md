@@ -16,12 +16,12 @@ Enter the `.dotfiles` directory and use `stow` on a directory to symlink it in t
 
 ```bash
 cd ~/.dotfiles
-stow vim
+stow --verbose=2 vim
 ```
 
 To remove symlinks, use the `-D` flag with stow:
 
 ```bash
 cd ~/.dotfiles
-stow -D vim
+stow --verbose=2 -D vim
 ```
