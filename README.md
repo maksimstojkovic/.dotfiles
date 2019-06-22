@@ -12,7 +12,7 @@ Clone the repo into `~/.dotfiles`:
 git clone https://github.com/silentdigit/dotfiles ~/.dotfiles
 ```
 
-Enter the `.dotfiles` directory and use `stow` with a directory to symlink it in the home directory (`~`):
+Enter the `.dotfiles` directory and use `stow` on a directory to symlink it in the home directory (`~`):
 
 ```bash
 cd ~/.dotfiles
