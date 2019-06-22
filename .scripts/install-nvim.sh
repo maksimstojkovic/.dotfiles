@@ -30,7 +30,7 @@ sudo apt-get remove -y neovim
 	git checkout stable
 	rm -rf build
 	make CMAKE_BUILD_TYPE=RelWithDebInfo
-	sudo make install
+	sudo make install # TODO add flag for install location
 	pip install --user neovim
 echo "INFO: Installing neovim DONE"
 
