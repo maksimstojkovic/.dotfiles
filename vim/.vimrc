@@ -182,7 +182,7 @@ let g:bullets_enabled_file_types = [
 \]
 
 " use {H,J,K,L} to move lines
-let g:move_key_modifier = 'S'
+let g:move_key_modifier = 'C'
 
 " gitgutter settings
 let g:gitgutter_realtime = 1
