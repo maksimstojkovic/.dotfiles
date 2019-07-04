@@ -85,5 +85,5 @@ echo "INFO: Installing airline/powerline patched fonts DONE"
 # TODO install Rmarkdown pre-requisites
 
 echo ""
-echo "INFO: neovim source files can be found in /tmp/neovim"
+echo "INFO: Neovim source files can be found in /tmp/neovim"
 echo "INFO: To complete setup, change the terminal font to Source Code Pro for Powerline"
