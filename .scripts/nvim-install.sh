@@ -11,13 +11,8 @@ fi
 
 # determine current user, home and script directory after executing with sudo
 user=${SUDO_USER:-${USER}}
-echo $user
-
 home=/home/$user
-echo $home
-
 dir="$(dirname "$(readlink -f "$0")")"
-echo $dir
 
 # TODO move dotfiles repo within script
 # check if dotfiles repo has been moved to ~/.dotfiles
@@ -25,7 +20,6 @@ if [ "$dir" == "${dir/$home\/.dotfiles/}" ]; then
 	echo "Please move the dotfiles repo to $home/.dotfiles"
 	exit 1
 fi
-
 
 # installing neovim dependencies
 echo "INFO: Installing neovim dependencies"
