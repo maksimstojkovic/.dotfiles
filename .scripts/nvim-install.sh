@@ -43,7 +43,7 @@ echo "INFO: Installing neovim from source"
 git clone https://github.com/neovim/neovim /tmp/neovim
 cd /tmp/neovim
 rm -rf build
-make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim
+sudo -u $user make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim
 make install
 echo "INFO: Installing neovim from source DONE"
 
