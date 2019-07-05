@@ -13,6 +13,7 @@ fi
 user=${SUDO_USER:-${USER}}
 home=/home/$user
 dir="$(dirname "$(readlink -f "$0")")"
+moved=false
 
 if [ "$user" == "root" ]; then
 	echo "Please run this script as a regular user using sudo"
@@ -21,15 +22,17 @@ if [ "$user" == "root" ]; then
 fi
 
 if [ "$dir" == "${dir/$home\/.dotfiles/}" ]; then
-	#echo "Please move the dotfiles repo to $home/.dotfiles"
-	echo "Moving dotfiles to ~/.dotfiles"
+	echo "INFO: Moving dotfiles to ~/.dotfiles"
 	cd $home
 	sudo -u $user rm -rf .dotfiles
 	sudo -u $user mkdir -p .dotfiles
-	sudo -u $user cp -r $dir/.. $home/.dotfiles
+	sudo -u $user cp -v -r $dir/.. $home/.dotfiles
 	cd $home/.dotfiles
-	sudo -u $user rm -rf ${dir/.scripts/}
-	exit 1
+	sudo -u $user rm -v -rf ${dir/.scripts/}
+	dir="$home/.dotfiles/.scripts"
+	echo $dir
+	echo "INFO: Moving dotfiles to ~/.dotfiles DONE"
+	moved=true
 fi
 exit 1
 
@@ -102,6 +105,12 @@ stow --verbose=2 -t /usr/local/bin/ x86_64-linux/
 echo "INFO: Installing R and R-markdown pre-requisites DONE"
 
 echo
+echo "INFO: Installation complete"
 echo "INFO: Neovim source files can be found in /tmp/neovim"
 echo "INFO: To complete setup, change the terminal font to Source Code Pro for Powerline"
 echo "INFO: Font files can be found in /tmp/fonts"
+if [ "$moved" = true ]; then
+	echo "INFO: To proceed, execute one of the following:"
+	echo "cd ~"
+	echo "cd ~/.dotfiles"
+fi
