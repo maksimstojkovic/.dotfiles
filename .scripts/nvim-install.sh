@@ -30,11 +30,9 @@ if [ "$dir" == "${dir/$home\/.dotfiles/}" ]; then
 	cd $home/.dotfiles
 	sudo -u $user rm -v -rf ${dir/.scripts/}
 	dir="$home/.dotfiles/.scripts"
-	echo $dir
 	echo "INFO: Moving dotfiles to ~/.dotfiles DONE"
 	moved=true
 fi
-exit 1
 
 echo "INFO: Installing neovim dependencies"
 apt-get update
