@@ -1,27 +1,31 @@
 #!/usr/bin/env bash
 
-# script for setting up neovim to use .vimrc in home directory, which symbolically links to the dotfiles git repo
+# script for setting up neovim on a fresh linux OS
+# only tested on ubuntu
+# installs all pre-requisites required to edit and export Rmarkdown files to PDF
 
-# ensure script is not run with sudo so current user and home can be identified
 if [ "$EUID" != "0" ]; then
 	echo "Please run this script with sudo"
 	echo "sudo $0"
 	exit 1
 fi
 
-# determine current user, home and script directory after executing with sudo
 user=${SUDO_USER:-${USER}}
 home=/home/$user
 dir="$(dirname "$(readlink -f "$0")")"
 
+if [ "$user" == "root" ]; then
+	echo "Please run this script as a regular user using sudo"
+	echo "sudo $0"
+	exit 1
+fi
+
 # TODO move dotfiles repo within script
-# check if dotfiles repo has been moved to ~/.dotfiles
 if [ "$dir" == "${dir/$home\/.dotfiles/}" ]; then
 	echo "Please move the dotfiles repo to $home/.dotfiles"
 	exit 1
 fi
 
-# installing neovim dependencies
 echo "INFO: Installing neovim dependencies"
 apt-get update
 apt-get remove -y neovim
@@ -31,19 +35,17 @@ apt-get install -y python-dev python-pip python3-dev python3-pip
 sudo -u $user pip install --user pynvim
 echo "INFO: Installing neovim dependencies DONE"
 
-# create stow directory if it does not exist
 if [ ! -d "/usr/local/stow" ]; then
 	echo "Creating /usr/local/stow directory"
 	mkdir -p /usr/local/stow
 	echo "Creating /usr/local/stow directory DONE"
 fi
 
-# remove any existing directories which will be used in /tmp
-echo "INFO: Removing temp directories"
+# TODO check if tmp directories exist, and ask if install should remove and proceed
+echo "INFO: Removing required tmp directories"
 rm -rf /tmp/neovim /tmp/fonts
 echo "INFO: Removing temp directories DONE"
 
-# installing neovim from source
 echo "INFO: Installing neovim from source"
 git clone https://github.com/neovim/neovim --depth=1 /tmp/neovim
 cd /tmp/neovim
@@ -52,43 +54,47 @@ sudo -u $user make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/loc
 make install
 echo "INFO: Installing neovim from source DONE"
 
-# symlinking neovim binary files
 echo "INFO: Symlinking neovim bin files"
 cd /usr/local/stow
 stow --verbose=2 nvim
 echo "INFO: Symlinking neovim bin files DONE"
 
-# symlinking .vimrc and init.vim files
 echo "INFO: Symlinking .vimrc and init.vim files"
 cd $home/.dotfiles
 stow --verbose=2 vim
 echo "INFO: Symlinking .vimrc and init.vim files DONE"
 
-# add neovim to alternatives list
 echo "INFO: Updating default editors"
-	update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
+#	update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
 	update-alternatives --install /usr/bin/vim vim /usr/local/bin/nvim 60
 	update-alternatives --install /usr/bin/editor editor /usr/local/bin/nvim 60
 echo "INFO: Updating default editors DONE"
 
-# install vim-plug and all plugins in .vimrc
 echo "INFO: Installing vim plugins"
 vim +"PlugInstall | q! | q!" ~/$RANDOM.txt --headless
 echo "INFO: Installing vim plugins DONE"
 
-# setting up vim-airline
-# more instructions here https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
-# On Windows, install all of the source code pro fonts from here https://github.com/powerline/fonts/tree/master/SourceCodePro
-# On Windows the terminal font should also be changed to source code pro
+# On Windows, install all of the source code pro fonts from https://github.com/powerline/fonts/tree/master/SourceCodePro
+# Windows - Change terminal font to Source Code Pro for Powerline
+# Additional instructions can be found at https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
 echo "INFO: Installing airline/powerline patched fonts"
-
 git clone https://github.com/powerline/fonts.git --depth=1 /tmp/fonts
 cd /tmp/fonts
 install.sh
 echo "INFO: Installing airline/powerline patched fonts DONE"
 
-# TODO install Rmarkdown pre-requisites
+echo "INFO: Installing R and R-markdown pre-requisites"
+apt-get install -y r-base pandoc pandoc-citeproc
+R --no-save << EOF
+	install.packages("tinytex")
+	tinytex::install_tinytex(dir = "/usr/local/stow/tinytex")
+EOF
+rm -rf ~/bin
+cd /usr/local/stow/tinytex/bin
+stow --verbose=2 -t /usr/local/bin/ x86_64-linux/
+echo "INFO: Installing R and R-markdown pre-requisites DONE"
 
-echo ""
+echo
 echo "INFO: Neovim source files can be found in /tmp/neovim"
 echo "INFO: To complete setup, change the terminal font to Source Code Pro for Powerline"
+echo "INFO: Font files can be found in /tmp/fonts"
