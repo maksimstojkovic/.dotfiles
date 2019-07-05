@@ -55,7 +55,7 @@ rm -rf /tmp/neovim /tmp/fonts
 echo "INFO: Removing temp directories DONE"
 
 echo "INFO: Installing neovim from source"
-git clone https://github.com/neovim/neovim --depth=1 /tmp/neovim
+git clone https://github.com/neovim/neovim /tmp/neovim
 cd /tmp/neovim
 rm -rf build
 sudo -u $user make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim
