@@ -20,11 +20,18 @@ if [ "$user" == "root" ]; then
 	exit 1
 fi
 
-# TODO move dotfiles repo within script
 if [ "$dir" == "${dir/$home\/.dotfiles/}" ]; then
-	echo "Please move the dotfiles repo to $home/.dotfiles"
+	#echo "Please move the dotfiles repo to $home/.dotfiles"
+	echo "Moving dotfiles to ~/.dotfiles"
+	cd $home
+	sudo -u $user rm -rf .dotfiles
+	sudo -u $user mkdir -p .dotfiles
+	sudo -u $user cp -r $dir/.. $home/.dotfiles
+	cd $home/.dotfiles
+	sudo -u $user rm -rf ${dir/.scripts/}
 	exit 1
 fi
+exit 1
 
 echo "INFO: Installing neovim dependencies"
 apt-get update
