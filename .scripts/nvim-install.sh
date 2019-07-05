@@ -50,16 +50,16 @@ if [ ! -d "/usr/local/stow" ]; then
 fi
 
 # TODO check if tmp directories exist, and ask if install should remove and proceed
-echo "INFO: Removing required tmp directories"
-rm -rf /tmp/neovim /tmp/fonts
-echo "INFO: Removing temp directories DONE"
+echo "INFO: Removing required $home directories"
+rm -rf $home/neovim $home/fonts
+echo "INFO: Removing required $home directories DONE"
 
 echo "INFO: Installing neovim from source"
-git clone https://github.com/neovim/neovim /tmp/neovim
-cd /tmp/neovim
+sudo -u $user git clone https://github.com/neovim/neovim $home/neovim
+cd $home/neovim
 rm -rf build
 sudo -u $user make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim
-make install
+make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim install
 echo "INFO: Installing neovim from source DONE"
 
 echo "INFO: Symlinking neovim bin files"
@@ -86,8 +86,8 @@ echo "INFO: Installing vim plugins DONE"
 # Windows - Change terminal font to Source Code Pro for Powerline
 # Additional instructions can be found at https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
 echo "INFO: Installing airline/powerline patched fonts"
-git clone https://github.com/powerline/fonts.git --depth=1 /tmp/fonts
-cd /tmp/fonts
+git clone https://github.com/powerline/fonts.git --depth=1 $home/fonts
+cd $home/fonts
 install.sh
 echo "INFO: Installing airline/powerline patched fonts DONE"
 
@@ -97,16 +97,17 @@ R --no-save << EOF
 	install.packages("tinytex")
 	tinytex::install_tinytex(dir = "/usr/local/stow/tinytex")
 EOF
-rm -rf ~/bin
+rm -rf $home/bin
 cd /usr/local/stow/tinytex/bin
 stow --verbose=2 -t /usr/local/bin/ x86_64-linux/
 echo "INFO: Installing R and R-markdown pre-requisites DONE"
 
 echo
 echo "INFO: Installation complete"
-echo "INFO: Neovim source files can be found in /tmp/neovim"
+echo "INFO: Neovim source files can be found in ~/neovim"
 echo "INFO: To complete setup, change the terminal font to Source Code Pro for Powerline"
-echo "INFO: Font files can be found in /tmp/fonts"
+echo "INFO: Font files can be found in ~/fonts"
+echo "INFO: Both of these directories can be removed"
 if [ "$moved" = true ]; then
 	echo "INFO: To proceed, execute one of the following:"
 	echo "cd ~"
