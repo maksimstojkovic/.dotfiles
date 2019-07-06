@@ -49,13 +49,12 @@ if [ ! -d "/usr/local/stow" ]; then
 	echo "Creating /usr/local/stow directory DONE"
 fi
 
-# TODO check if tmp directories exist, and ask if install should remove and proceed
-echo "INFO: Removing required /tmp directories"
-rm -rf /tmp/neovim /tmp/fonts
-echo "INFO: Removing required /tmp directories DONE"
+echo "INFO: Removing required /tmp and /usr/local/stow directories"
+rm -rf /tmp/neovim /tmp/fonts /usr/local/stow/nvim /usr/local/stow/tinytex
+echo "INFO: Removing required /tmp and /usr/local/stow directories DONE"
 
 echo "INFO: Installing neovim from source"
-sudo -u $user git clone https://github.com/neovim/neovim /tmp/neovim
+sudo -u $user git clone https://github.com/neovim/neovim --depth=1 /tmp/neovim
 cd /tmp/neovim
 rm -rf build
 sudo -u $user make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim
