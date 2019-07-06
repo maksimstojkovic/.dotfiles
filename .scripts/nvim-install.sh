@@ -51,7 +51,7 @@ fi
 
 # TODO check if tmp directories exist, and ask if install should remove and proceed
 echo "INFO: Removing required /tmp directories"
-rm -rf $home/neovim $home/fonts
+rm -rf /tmp/neovim /tmp/fonts
 echo "INFO: Removing required /tmp directories DONE"
 
 echo "INFO: Installing neovim from source"
