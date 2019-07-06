@@ -33,10 +33,23 @@ echo "INFO: Removing required /tmp and /usr/local/stow directories"
 cd /usr/local/stow
 # TODO only unstow if directory exists
 stow --verbose=2 -D scim
+stow --verbose=2 -D libxls
 stow --verbose=2 -D libxlsxwriter
 cd $home
-rm -rf /tmp/scim /tmp/libxlsxwriter /usr/local/stow/scim /usr/local/stow/libxlsxwriter
+rm -rf /tmp/scim /tmp/libxlsxwriter /tmp/libxls /usr/local/stow/scim /usr/local/stow/libxlsxwriter /usr/local/stow/libxls
 echo "INFO: Removing required /tmp and /usr/local/stow directories DONE"
+
+echo "INFO: Installing xls dependencies"
+sudo -u $user git clone https://github.com/libxls/libxls --depth=1 /tmp/libxls
+cd /tmp/libxls
+sudo -u $user ./bootstrap
+sudo -u $user ./configure
+sudo -u $user make prefix=/usr/local/stow/libxls
+make install prefix=/usr/local/stow/libxls
+cd /usr/local/stow
+stow --verbose=2 libxls
+ldconfig
+echo "INFO: Installing xls dependencies DONE"
 
 echo "INFO: Installing xlsx dependencies"
 sudo -u $user git clone https://github.com/jmcnamara/libxlsxwriter.git --depth=1 /tmp/libxlsxwriter
@@ -51,8 +64,7 @@ echo "INFO: Installing xlsx dependencies DONE"
 echo "INFO: Installing scim from source"
 sudo -u $user git clone https://github.com/andmarti1424/sc-im --depth=1 /tmp/scim
 cd /tmp/scim/src
-# sed -i -E '0,/name\s*=/s/name\s*=.*/name = scim/' Makefile
-# sed -i -E '0,/prefix\s*=/s/prefix.*/prefix = \/usr\/local\/stow\/scim/' Makefile
+# TODO add flags for xls compatibility
 sudo -u $user make name=scim prefix=/usr/local/stow/scim
 make install name=scim prefix=/usr/local/stow/scim
 echo "INFO: Installing scim from source DONE"
