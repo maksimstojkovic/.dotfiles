@@ -25,7 +25,7 @@ fi
 
 echo "INFO: Installing scim dependencies"
 apt-get update
-apt-get install -y stow autotools-dev
+apt-get install -y stow autotools-dev sed build-essentials
 apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev
 echo "INFO: Installing scim dependencies DONE"
 
@@ -64,7 +64,11 @@ echo "INFO: Installing xlsx dependencies DONE"
 echo "INFO: Installing scim from source"
 sudo -u $user git clone https://github.com/andmarti1424/sc-im --depth=1 /tmp/scim
 cd /tmp/scim/src
-# TODO add flags for xls compatibility
+
+# Flags for xls compatibility
+sed -i -E '0,/#\s*CFLAGS\s*\+=\s*-DXLS\s/s/#\s*CFLAGS\s*\+=\s*-DXLS/CFLAGS += -DXLS/' Makefile
+sed -i -E '0,/#\s*LDLIBS\s*\+=\s*-lxlsreader\s/s/#\s*LDLIBS\s*\+=\s*-lxlsreader/LDLIBS += -lxlsreader/' Makefile
+
 sudo -u $user make name=scim prefix=/usr/local/stow/scim
 make install name=scim prefix=/usr/local/stow/scim
 echo "INFO: Installing scim from source DONE"

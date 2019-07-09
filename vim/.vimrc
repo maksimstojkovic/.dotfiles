@@ -90,18 +90,18 @@ nnoremap k gk
 nnoremap <leader><leader> <esc>:w<cr><esc>
 
 " auto close curly braces
-function! s:CloseBracket()
-	let line = getline('.')
-	if line =~# '^\s*\(struct\|class\|enum\) '
-		return "{\<Enter>};\<Esc>O"
-	elseif searchpair('(', '', ')', 'bmn', '', line('.'))
-		" Probably inside a function call. Close it off.
-		return "{\<Enter>});\<Esc>O"
-	else
-		return "{\<Enter>}\<Esc>O"
-	endif
-endfunction
-inoremap <expr> {<Enter> <SID>CloseBracket()
+" function! s:CloseBracket()
+" 	let line = getline('.')
+" 	if line =~# '^\s*\(struct\|class\|enum\) '
+" 		return "{\<Enter>};\<Esc>O"
+" 	elseif searchpair('(', '', ')', 'bmn', '', line('.'))
+" 		" Probably inside a function call. Close it off.
+" 		return "{\<Enter>});\<Esc>O"
+" 	else
+" 		return "{\<Enter>}\<Esc>O"
+" 	endif
+" endfunction
+" inoremap <expr> {<Enter> <SID>CloseBracket()
 
 " strips trailing whitespace at the end of all lines
 function! StripTrailingWhitespaces()
