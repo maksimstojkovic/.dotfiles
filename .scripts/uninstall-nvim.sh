@@ -12,3 +12,8 @@ stow --verbose=2 -D -t /usr/local/bin/ x86_64-linux/
 cd /usr/local/stow
 rm -rf nvim tinytex
 
+R --no-save << EOF
+	tinytex::uninstall_tinytex(dir = "/opt/tinytex")
+EOF
+
+rm -rf /opt/tinytex

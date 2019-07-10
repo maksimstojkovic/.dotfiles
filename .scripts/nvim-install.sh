@@ -4,6 +4,8 @@
 # only tested on ubuntu
 # installs all pre-requisites required to edit and export Rmarkdown files to PDF
 
+# TODO add -y override
+
 if [ "$EUID" != "0" ]; then
 	echo "INFO: Please run this script with sudo"
 	echo "sudo $0"
@@ -14,8 +16,7 @@ user=${SUDO_USER:-${USER}}
 home=/home/${user}
 dir="$(dirname "$(readlink -f "$0")")"
 moved=false
-nvim_stow=true
-tinytex_stow=true
+stow_dir=/usr/local/stow
 nvim_prefix=/usr/local/stow/nvim
 tinytex_opt_prefix=/opt/tinytex
 tinytex_stow_prefix=/usr/local/stow/tinytex
@@ -59,57 +60,56 @@ fi
 echo "INFO: Installing neovim dependencies"
 apt-get update
 apt-get remove -y neovim
-apt-get install -y stow build-essentials
+apt-get install -y stow build-essentials find
 apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
 apt-get install -y python-dev python-pip python3-dev python3-pip
 sudo -u ${user} pip install --user pynvim
 echo "INFO: Installing neovim dependencies DONE"
 
-if [ ! -d "/usr/local/stow" ]; then
-	echo "Creating /usr/local/stow directory"
-	mkdir -p /usr/local/stow
-	echo "Creating /usr/local/stow directory DONE"
+if [ ! -d "$stow_dir" ]; then
+	echo "INFO: Creating ${stow_dir} directory"
+	mkdir -p ${stow_dir}
+	echo "INFO: Creating ${stow_dir} directory DONE"
 fi
 
 echo "INFO: Removing required directories"
-
-for d in "$nvim_prefix" "$tinytex_opt_prefix" "tinytex_stow_prefix"; do
+for d in "$nvim_prefix" "$tinytex_opt_prefix" "$tinytex_stow_prefix"; do
 	if [ -d "$d" ]; then
-		echo "INFO: ${d} already exists. Would you like to remove it and continue installing?
+		echo "INFO: ${d} already exists. Would you like to remove it and continue?"
 		select yn in "y" "n"; do
 			case $yn in
 				y ) break;;
 				n ) exit;;
 			esac
 		done
-
+	fi
 done
 
 rm -rf /tmp/neovim /tmp/fonts ${nvim_prefix} ${tinytex_opt_prefix} ${tinytex_stow_prefix}
 echo "INFO: Removing required directories DONE"
 
 echo "INFO: Installing neovim from source"
-sudo -u $user git clone https://github.com/neovim/neovim --depth=1 /tmp/neovim
+sudo -u ${user} git clone https://github.com/neovim/neovim --depth=1 /tmp/neovim
 cd /tmp/neovim
 rm -rf build
-sudo -u $user make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim
-make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=/usr/local/stow/nvim install
+sudo -u ${user} make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX='${nvim_prefix}'
+make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX='${nvim_prefix}'
 echo "INFO: Installing neovim from source DONE"
 
 echo "INFO: Symlinking neovim bin files"
-cd /usr/local/stow
+cd ${stow_dir}
 stow --verbose=2 nvim
 echo "INFO: Symlinking neovim bin files DONE"
 
 echo "INFO: Symlinking .vimrc and init.vim files"
-cd $home/.dotfiles
+cd ${home}/.dotfiles
 stow --verbose=2 vim
 echo "INFO: Symlinking .vimrc and init.vim files DONE"
 
 echo "INFO: Updating default editors"
-#	update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
-	update-alternatives --install /usr/bin/vim vim /usr/local/bin/nvim 60
-	update-alternatives --install /usr/bin/editor editor /usr/local/bin/nvim 60
+# update-alternatives --install /usr/bin/vi vi /usr/local/bin/nvim 60
+update-alternatives --install /usr/bin/vim vim /usr/local/bin/nvim 60
+update-alternatives --install /usr/bin/editor editor /usr/local/bin/nvim 60
 echo "INFO: Updating default editors DONE"
 
 echo "INFO: Installing vim plugins"
@@ -131,13 +131,12 @@ R --no-save << EOF
 	install.packages("tinytex")
 	tinytex::install_tinytex(dir = "${tinytex_opt_prefix}")
 EOF
-# rm -rf $home/bin
-stow --verbose=2 -D -t ${home}/bin -d ${tinytex_opt_prefix}/bin x86_64-linux
-
-# TODO remove home/bin if empty
-
-ln -sf ${tinytex_opt_prefix}/bin/x86_64-linux ${tinytex_stow_prefix}
-stow --verbose=2 -t /usr/local/bin x86_64-linux
+find -lname '${tinytex_opt_prefix}/*' -delete
+rm -d ${home}/bin
+mkdir -p ${tinytex_stow_prefix}/bin
+ln -s -v ${tinytex_opt_prefix}/bin/x86_64-linux/* ${tinytex_stow_prefix}/bin
+cd ${stow_dir}
+stow --verbose=2 tinytex
 echo "INFO: Installing R and R-markdown pre-requisites DONE"
 
 echo
