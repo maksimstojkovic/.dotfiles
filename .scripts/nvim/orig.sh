@@ -23,21 +23,90 @@ home=/home/${user}
 dir="$(dirname "$(readlink -f "$0")")"
 moved=false
 stow_dir=/usr/local/stow
-nvim_prefix=${stow_dir}/nvim
+nvim_prefix=/usr/local/stow/nvim
 tinytex_opt_prefix=/opt/tinytex
-tinytex_stow_prefix=${stow_dir}/tinytex
+tinytex_stow_prefix=/usr/local/stow/tinytex
 
-rm -rf ${nvim_prefix}
+if [ -z "$dir" ]; then
+	echo "INFO: Could not locate script directory, please run the script within the .script directory"
+	exit 1
+fi
+
+if [ "$user" == "root" ]; then
+	echo "INFO: Please run this script as a regular user using sudo"
+	echo "sudo ${0}"
+	exit 1
+fi
+
+# executes if substring not found (no substitution)
+if [ "$dir" == "${dir/${home}\/.dotfiles/}" ]; then
+	echo "INFO: Moving dotfiles to ~/.dotfiles"
+
+	if [ -d "$home/.dotfiles" ]; then
+		echo "INFO: ~/.dotfiles exists, would you like to overwrite and continue?"
+		select yn in "Yes" "No"; do
+			case $yn in
+				"Yes")
+					break
+					;;
+				"No")
+					exit
+					;;
+			esac
+		done
+	fi
+
+	cd ${home}
+	sudo -u ${user} rm -rf .dotfiles
+	sudo -u ${user} mkdir -p .dotfiles
+	sudo -u ${user} cp -v -r ${dir/.scripts/} ${home}/.dotfiles
+	cd ${home}/.dotfiles
+	sudo -u ${user} rm -v -rf ${dir/.scripts/}
+	dir="${home}/.dotfiles/.scripts"
+	echo "INFO: Moving dotfiles to ~/.dotfiles DONE"
+	moved=true
+fi
+
+echo "INFO: Installing neovim dependencies"
+apt-get update
+apt-get remove -y neovim
+apt-get install -y stow build-essential
+apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+apt-get install -y python-dev python-pip python3-dev python3-pip
+sudo -u ${user} pip install --user pynvim
+echo "INFO: Installing neovim dependencies DONE"
+
+if [ ! -d "$stow_dir" ]; then
+	echo "INFO: Creating ${stow_dir} directory"
+	mkdir -p ${stow_dir}
+	echo "INFO: Creating ${stow_dir} directory DONE"
+fi
+
+echo "INFO: Removing required directories"
+# for d in "$nvim_prefix" "$tinytex_opt_prefix" "$tinytex_stow_prefix"; do
+# 	if [ -d "$d" ]; then
+# 		echo "INFO: ${d} already exists. Would you like to remove it and continue?"
+# 		select yn in "Yes" "No"; do
+# 			case $yn in
+# 				"Yes") break;;
+# 				"No") exit;;
+# 			esac
+# 		done
+# 	fi
+# done
+
+unstow nvim
+unstow tinytex
+rm -rf /tmp/neovim /tmp/fonts ${nvim_prefix} ${tinytex_opt_prefix} ${tinytex_stow_prefix}
+echo "INFO: Removing required directories DONE"
 
 echo "INFO: Installing neovim from source"
-# sudo -u ${user} git clone https://github.com/neovim/neovim /tmp/neovim
-# cp -v -r $home/vim /tmp/neovim
+sudo -u ${user} git clone https://github.com/neovim/neovim /tmp/neovim
 cd /tmp/neovim
-# rm -rf build
-sudo -u ${user} make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=${nvim_prefix}
-make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=${nvim_prefix} install
+rm -rf build
+sudo -u ${user} make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX='${nvim_prefix}'
+make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX='${nvim_prefix}' install
 echo "INFO: Installing neovim from source DONE"
-exit ##############################################
 
 echo "INFO: Symlinking neovim bin files"
 cd ${stow_dir}
