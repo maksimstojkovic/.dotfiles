@@ -57,7 +57,7 @@ find -type f -name "*nvim*" -delete
 echo "REMOVING REQUIRED DIRECTORIES DONE"
 
 echo "INSTALLING NEOVIM FROM SOURCE"
-# sudo -u ${user} git clone https://github.com/neovim/neovim /tmp/nvim TODO REMOVE
+# sudo -u ${user} git clone https://github.com/neovim/neovim /tmp/nvim TODO uncomment and remove cp below
 sudo -u $user cp -r -v /tmp/vim /tmp/nvim
 cd /tmp/nvim
 rm -rf build
@@ -94,7 +94,7 @@ echo "SETTING UP VIM R-MARKDOWN DONE"
 # On Windows, install all of the source code pro fonts from https://github.com/powerline/fonts/tree/master/SourceCodePro
 # Windows - Change terminal font to Source Code Pro for Powerline
 # Additional instructions can be found at https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
-# echo "INSTALLING AIRLINE/POWERLINE PATCHED FONTS"
+# echo "INSTALLING AIRLINE/POWERLINE PATCHED FONTS" TODO uncomment
 # git clone https://github.com/powerline/fonts.git /tmp/fonts
 # cd /tmp/fonts
 # ./install.sh
