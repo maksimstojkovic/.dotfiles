@@ -1,107 +1,98 @@
 #!/usr/bin/env bash
 
-# script for installing scim in stow directory
-
-unstow() {
-	package=$(basename ${1})
-	d=${2:-${stow_dir}}
-	if [ -d "$d" ]; then
-		cd ${d}
-		stow --verbose=2 -D ${package}
-	fi
-}
-
-stow() {
-	package=$(basename ${1})
-	d=${2:-${stow_dir}}
-	if [ -d "$d" ]; then
-		cd ${d}
-		stow --verbose=2 ${package}
-	fi
-}
+user=${SUDO_USER:-${USER}}
+home=/home/${user}
+dir=$(dirname "$(readlink -f "$0")")
+stow_dir=/usr/local/stow
+scim_stow=${stow_dir}/scim
 
 if [ "$EUID" != "0" ]; then
-	echo "Please run this script with sudo"
+	echo "PLEASE RUN THIS SCRIPT WITH SUDO"
 	echo "sudo $0"
 	exit 1
 fi
-
-user=${SUDO_USER:-${USER}}
-home=/home/$user
-stow_dir=/usr/local/stow
 
 if [ "$user" == "root" ]; then
-	echo "Please run this script as a regular user using sudo"
+	echo "PLEASE RUN THIS SCRIPT AS A REGULAR USER USING 'sudo'"
 	echo "sudo $0"
 	exit 1
 fi
 
-if [ ! -d "${stow_dir}" ]; then
-	echo "Creating ${stow_dir} directory"
-	mkdir -p ${stow_dir}
-	echo "Creating ${stow_dir} directory DONE"
+if [ -z "$dir" ]; then
+	echo "COULD NOT LOCATE SCRIPT DIRECTORY, PLEASE RUN WITHIN '~/.dotfiles/.scripts'"
+	exit 1
 fi
 
-echo "INFO: Installing scim dependencies"
-apt-get update
-apt-get install -y stow autotools-dev sed build-essential
-apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev
-echo "INFO: Installing scim dependencies DONE"
+if [ "$dir" == "${dir/${home}\/.dotfiles/}" ]; then
+	echo "SCRIPTS DIRECTORY NOT LOCATED AT '~/.dotfiles/.scripts'"
+	exit 1
+fi
 
-echo "INFO: Removing required directories"
+echo "INSTALLING DEPENDENCIES"
+apt-get install -y stow build-essential autotools-dev sed
+apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev
+echo "INSTALLING DEPENDENCIES DONE"
+
+# helper for unstowing packages if they exist
+unstow() {
+package=$(basename $1)
+if [ -d "${stow_dir}/${package}" ]; then
+	cd $stow_dir
+	stow --verbose=2 -D $package
+fi
+}
+
+echo "REMOVING REQUIRED DIRECTORIES"
 unstow scim
 unstow libxls
 unstow libxlsxwriter
-cd ${home}
-rm -rf /tmp/scim /tmp/libxls /tmp/libxlsxwriter ${stow_dir}/scim ${stow_dir}/libxls ${stow_dir}/libxlsxwriter
-echo "INFO: Removing required directories DONE"
+cd $home
+rm -v -rf /tmp/scim /tmp/libxls /tmp/libxlsxwriter ${stow_dir}/scim ${stow_dir}/libxls ${stow_dir}/libxlsxwriter
+echo "REMOVING REQUIRED DIRECTORIES DONE"
 
-echo "INFO: Installing xls dependencies"
-sudo -u ${user} git clone https://github.com/libxls/libxls --depth=1 /tmp/libxls
+echo "INSTALLING XLS DEPENDENCIES"
+sudo -u $user git clone https://github.com/libxls/libxls /tmp/libxls
 cd /tmp/libxls
-sudo -u ${user} ./bootstrap
-sudo -u ${user} ./configure
-sudo -u ${user} make prefix=/usr/local/stow/libxls
-make install prefix=/usr/local/stow/libxls
-cd /usr/local/stow
+sudo -u $user ./bootstrap
+sudo -u $user ./configure
+sudo -u $user make prefix=${stow_dir}/libxls
+make install prefix=${stow_dir}/libxls
+cd $stow_dir
 stow --verbose=2 libxls
 ldconfig
-echo "INFO: Installing xls dependencies DONE"
+echo "INSTALLING XLS DEPENDENCIES DONE"
 
-echo "INFO: Installing xlsx dependencies"
-sudo -u $user git clone https://github.com/jmcnamara/libxlsxwriter.git --depth=1 /tmp/libxlsxwriter
+echo "INSTALLING XLSX DEPENDENCIES"
+sudo -u $user git clone https://github.com/jmcnamara/libxlsxwriter.git /tmp/libxlsxwriter
 cd /tmp/libxlsxwriter
-sudo -u $user make INSTALL_DIR=/usr/local/stow/libxlsxwriter
-make install INSTALL_DIR=/usr/local/stow/libxlsxwriter
-cd /usr/local/stow
+sudo -u $user make INSTALL_DIR=${stow_dir}/libxlsxwriter
+make install INSTALL_DIR=${stow_dir}/libxlsxwriter
+cd $stow_dir
 stow --verbose=2 libxlsxwriter
 ldconfig
-echo "INFO: Installing xlsx dependencies DONE"
+echo "INSTALLING XLSX DEPENDENCIES DONE"
 
-echo "INFO: Installing scim from source"
-sudo -u $user git clone https://github.com/andmarti1424/sc-im /tmp/scim
+echo "INSTALLING SCIM FROM SOURCE"
+# sudo -u $user git clone https://github.com/andmarti1424/sc-im /tmp/scim
+sudo -u $user cp -v -r /tmp/scim-tmp /tmp/scim
 cd /tmp/scim/src
 
 # Flags for xls compatibility
 # sed -i -E '0,/#\s*CFLAGS\s*\+=\s*-DXLS\s/s/#\s*CFLAGS\s*\+=\s*-DXLS/CFLAGS += -DXLS/' Makefile
 # sed -i -E '0,/#\s*LDLIBS\s*\+=\s*-lxlsreader\s/s/#\s*LDLIBS\s*\+=\s*-lxlsreader/LDLIBS += -lxlsreader/' Makefile
 
-sudo -u $user make name=scim prefix='${stow_dir}/scim' CFLAGS='-DXLS' LDLIBS='-lxlsreader'
-make install name=scim prefix='${stow_dir}/scim' CFLAGS='-DXLS' LDLIBS='-lxlsreader'
-echo "INFO: Installing scim from source DONE"
-
-echo "INFO: Symlinking scim bin files"
-cd ${stow_dir}
+sudo -u $user make name=scim prefix=${stow_dir}/scim
+make install name=scim prefix=${stow_dir}/scim
+cd $stow_dir
 stow --verbose=2 scim
-echo "INFO: Symlinking scim bin files DONE"
+echo "INSTALLING SCIM FROM SOURCE DONE"
 
-# TODO check that dotfiles in correct directory
-echo "INFO: Symlinking .scimrc file"
-cd $home/.dotfiles
+echo "SYMLINKING .scimrc FILES"
+cd ${home}/.dotfiles
 stow --verbose=2 scim
-echo "INFO: Symlinking .scimrc file DONE"
+echo "SYMLINKING .scimrc FILES DONE"
 
-echo "INFO: Updating scim alternatives"
-update-alternatives --install /usr/bin/scim scim /usr/local/bin/scim 60
-echo "INFO: Updating scim alternatives DONE"
+# echo "INFO: Updating scim alternatives"
+# update-alternatives --install /usr/bin/scim scim /usr/local/bin/scim 60
+# echo "INFO: Updating scim alternatives DONE"
 

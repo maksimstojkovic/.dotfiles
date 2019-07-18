@@ -14,14 +14,14 @@ if [ "$EUID" != "0" ]; then
 	exit 1
 fi
 
-if [ -z "$dir" ]; then
-	echo "COULD NOT LOCATE SCRIPT DIRECTORY, PLEASE RUN WITHIN '~/.dotfiles/.scripts'"
-	exit 1
-fi
-
 if [ "$user" == "root" ]; then
 	echo "PLEASE RUN THIS SCRIPT AS A REGULAR USER USING 'sudo'"
 	echo "sudo ${0}"
+	exit 1
+fi
+
+if [ -z "$dir" ]; then
+	echo "COULD NOT LOCATE SCRIPT DIRECTORY, PLEASE RUN WITHIN '~/.dotfiles/.scripts'"
 	exit 1
 fi
 
@@ -58,7 +58,7 @@ echo "REMOVING REQUIRED DIRECTORIES DONE"
 
 echo "INSTALLING NEOVIM FROM SOURCE"
 # sudo -u ${user} git clone https://github.com/neovim/neovim /tmp/nvim TODO uncomment and remove cp below
-sudo -u $user cp -r -v /tmp/vim /tmp/nvim
+sudo -u $user cp -v -r /tmp/vim /tmp/nvim
 cd /tmp/nvim
 rm -rf build
 sudo -u $user make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=${nvim_stow}
