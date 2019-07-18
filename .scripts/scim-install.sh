@@ -29,8 +29,8 @@ if [ "$dir" == "${dir/${home}\/.dotfiles/}" ]; then
 fi
 
 echo "INSTALLING DEPENDENCIES"
-# apt-get install -y stow build-essential autotools-dev sed
-# apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev
+apt-get install -y stow build-essential autotools-dev sed
+apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev
 echo "INSTALLING DEPENDENCIES DONE"
 
 # helper for unstowing packages if they exist
@@ -51,8 +51,7 @@ rm -v -rf /tmp/scim /tmp/libxls /tmp/libxlsxwriter ${stow_dir}/scim ${stow_dir}/
 echo "REMOVING REQUIRED DIRECTORIES DONE"
 
 echo "INSTALLING XLS DEPENDENCIES"
-# sudo -u $user git clone https://github.com/libxls/libxls /tmp/libxls
-sudo -u $user cp -v -r /tmp/xls /tmp/libxls
+sudo -u $user git clone https://github.com/libxls/libxls /tmp/libxls
 cd /tmp/libxls
 sudo -u $user ./bootstrap
 sudo -u $user ./configure
@@ -64,8 +63,7 @@ ldconfig
 echo "INSTALLING XLS DEPENDENCIES DONE"
 
 echo "INSTALLING XLSX DEPENDENCIES"
-# sudo -u $user git clone https://github.com/jmcnamara/libxlsxwriter.git /tmp/libxlsxwriter
-sudo -u $user cp -v -r /tmp/xlsx /tmp/libxlsxwriter
+sudo -u $user git clone https://github.com/jmcnamara/libxlsxwriter.git /tmp/libxlsxwriter
 cd /tmp/libxlsxwriter
 sudo -u $user make INSTALL_DIR=${stow_dir}/libxlsxwriter
 make install INSTALL_DIR=${stow_dir}/libxlsxwriter
@@ -75,8 +73,7 @@ ldconfig
 echo "INSTALLING XLSX DEPENDENCIES DONE"
 
 echo "INSTALLING SCIM FROM SOURCE"
-# sudo -u $user git clone https://github.com/andmarti1424/sc-im /tmp/scim
-sudo -u $user cp -v -r /tmp/sc /tmp/scim
+sudo -u $user git clone https://github.com/andmarti1424/sc-im /tmp/scim
 cd /tmp/scim/src
 
 # Flags for xls compatibility
@@ -93,8 +90,3 @@ echo "SYMLINKING .scimrc FILES"
 cd ${home}/.dotfiles
 stow --verbose=2 scim
 echo "SYMLINKING .scimrc FILES DONE"
-
-# echo "INFO: Updating scim alternatives"
-# update-alternatives --install /usr/bin/scim scim /usr/local/bin/scim 60
-# echo "INFO: Updating scim alternatives DONE"
-

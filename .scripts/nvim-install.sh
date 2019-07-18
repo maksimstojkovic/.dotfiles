@@ -30,14 +30,14 @@ if [ "$dir" == "${dir/${home}\/.dotfiles/}" ]; then
 	exit 1
 fi
 
-# echo "INSTALLING DEPENDENCIES" TODO uncomment
-# apt-get remove -y neovim
-# apt-get install -y stow build-essential
-# apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
-# apt-get install -y python-dev python-pip python3-dev python3-pip
-# apt-get install -y r-base pandoc pandoc-citeproc
-# sudo -u ${user} pip install -q --user pynvim
-# echo "INSTALLING DEPENDENCIES DONE"
+echo "INSTALLING DEPENDENCIES"
+apt-get remove -y neovim
+apt-get install -y stow build-essential
+apt-get install -y ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+apt-get install -y python-dev python-pip python3-dev python3-pip
+apt-get install -y r-base pandoc pandoc-citeproc
+sudo -u ${user} pip install -q --user pynvim
+echo "INSTALLING DEPENDENCIES DONE"
 
 # helper for unstowing packages if they exist
 unstow() {
@@ -57,8 +57,7 @@ find -type f -name "*nvim*" -delete
 echo "REMOVING REQUIRED DIRECTORIES DONE"
 
 echo "INSTALLING NEOVIM FROM SOURCE"
-# sudo -u ${user} git clone https://github.com/neovim/neovim /tmp/nvim TODO uncomment and remove cp below
-sudo -u $user cp -v -r /tmp/vim /tmp/nvim
+sudo -u ${user} git clone https://github.com/neovim/neovim /tmp/nvim
 cd /tmp/nvim
 rm -rf build
 sudo -u $user make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=${nvim_stow}
@@ -94,11 +93,11 @@ echo "SETTING UP VIM R-MARKDOWN DONE"
 # On Windows, install all of the source code pro fonts from https://github.com/powerline/fonts/tree/master/SourceCodePro
 # Windows - Change terminal font to Source Code Pro for Powerline
 # Additional instructions can be found at https://github.com/vim-airline/vim-airline/wiki/Dummies-Guide-to-the-status-bar-symbols-(Powerline-fonts)-on-Fedora,-Ubuntu-and-Windows
-# echo "INSTALLING AIRLINE/POWERLINE PATCHED FONTS" TODO uncomment
-# git clone https://github.com/powerline/fonts.git /tmp/fonts
-# cd /tmp/fonts
-# ./install.sh
-# echo "INSTALLING AIRLINE/POWERLINE PATCHED FONTS DONE"
+echo "INSTALLING AIRLINE/POWERLINE PATCHED FONTS"
+git clone https://github.com/powerline/fonts.git /tmp/fonts
+cd /tmp/fonts
+./install.sh
+echo "INSTALLING AIRLINE/POWERLINE PATCHED FONTS DONE"
 
 echo
 echo "INSTALLATION COMPLETE"
