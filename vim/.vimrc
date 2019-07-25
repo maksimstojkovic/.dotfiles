@@ -62,7 +62,7 @@ set relativenumber
 set cursorline
 
 " enable mouse
-set mouse=a
+" set mouse=a
 
 " show invisibles
 set list
@@ -74,7 +74,7 @@ set fillchars=vert:▒
 " Functions and Key Mappings
 
 " escape in insert mode
-inoremap jk <esc>
+" inoremap jk <esc>
 
 " remove highligting
 nnoremap <silent> <leader><space> <esc>:nohlsearch<cr><esc>
@@ -114,6 +114,9 @@ function! StripTrailingWhitespaces()
 	call cursor(l, c)
 endfunction
 
+" spell correct automatically
+autcmd BufRead,BufNewFile *.md,*.Rmd,*.rmd setlocal spell spelllang=en_au
+
 " Plugins
 
 " install vim-plug (unix compatible only)
@@ -142,7 +145,7 @@ Plug 'dkarter/bullets.vim'
 
 
 " features
-Plug 'matze/vim-move'
+" Plug 'matze/vim-move'
 Plug 'godlygeek/tabular'
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
@@ -182,7 +185,7 @@ let g:bullets_enabled_file_types = [
 \]
 
 " use {H,J,K,L} to move lines
-let g:move_key_modifier = 'C'
+" let g:move_key_modifier = 'C'
 
 " gitgutter settings
 let g:gitgutter_realtime = 1
