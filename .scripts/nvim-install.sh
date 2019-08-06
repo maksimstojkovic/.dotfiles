@@ -73,7 +73,7 @@ stow --verbose=2 vim
 echo "SYMLINKING .vimrc AND init.vim FILES DONE"
 
 echo "INSTALLING VIM PLUGINS"
-vim +"PlugInstall | q! | q!" ~/$RANDOM.txt --headless
+vim +PlugInstall +qa! --headless
 echo "INSTALLING VIM PLUGINS DONE"
 
 echo "SETTING UP VIM R-MARKDOWN"
