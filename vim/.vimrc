@@ -89,6 +89,9 @@ nnoremap k gk
 " quick-save
 nnoremap <leader><leader> <esc>:w<cr><esc>
 
+" disable ex-mode
+nnoremap Q <Nop>
+
 " auto close curly braces
 " function! s:CloseBracket()
 " 	let line = getline('.')
