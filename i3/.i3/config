@@ -419,5 +419,5 @@ mode "$mode_gaps_outer" {
 # Autostart Programs
 exec --no-startup-id /usr/bin/syncthing -no-browser
 
-
 # Custom keybinds
+bindsym $mod+Print --release exec --no-startup-id maim -su | xclip -selection clipboard -t image/png
