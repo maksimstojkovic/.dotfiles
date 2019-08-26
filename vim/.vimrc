@@ -217,8 +217,9 @@ highlight GitGutterDelete ctermfg=red ctermbg=0
 highlight GitGutterChangeDelete ctermfg=red ctermbg=0
 
 " airline settings (requires patched source code pro powerline font installed)
+" Source\ Code\ Pro\ for\ Powerline
 let g:airline_powerline_fonts = 1
-set guifont=Source\ Code\ Pro\ for\ Powerline:h15:cANSI
+set guifont=Terminess\ Powerline:h15:cANSI
 let g:airline_theme='jellybeans'
 
 " airline fallback symbols
