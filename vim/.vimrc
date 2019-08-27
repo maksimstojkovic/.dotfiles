@@ -89,6 +89,8 @@ nnoremap k gk
 " quick-save
 nnoremap <leader><leader> <esc>:w<cr><esc>
 
+nnoremap <leader>Q <esc>:w<cr><esc>:RMarkdown pdf<esc>
+
 " disable ex-mode
 nnoremap Q <Nop>
 
