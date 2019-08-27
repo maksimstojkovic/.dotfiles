@@ -90,7 +90,7 @@ nnoremap k gk
 nnoremap <leader><leader> <esc>:w<cr><esc>
 
 " rmarkdown export as pdf
-autocmd FileType rmarkdown nnoremap <leader>p <esc>:w<cr><esc>:RMarkdown pdf<esc>
+autocmd FileType rmarkdown nnoremap <leader>e <esc>:w<cr><esc>:RMarkdown pdf<esc>
 
 " disable ex-mode
 nnoremap Q <Nop>
