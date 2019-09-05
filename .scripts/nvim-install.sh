@@ -104,3 +104,5 @@ echo "INSTALLATION COMPLETE"
 echo "NEOVIM SOURCE FILES CAN BE FOUND IN /tmp/nvim"
 echo "ENSURE THAT THE TERMINAL FONT IS SET TO Source Code Pro for Powerline"
 echo "FONT FILES CAN BE FOUND IN /tmp/fonts"
+
+# On arch, install 'r' and 'tk' using pacman to eliminate errors in R on install

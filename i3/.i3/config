@@ -265,6 +265,7 @@ mode "resize" {
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
 }
 
 # Lock screen
