@@ -35,7 +35,7 @@ let mapleader=","
 set clipboard+=unnamedplus
 
 " remove trailing whitespaces on write
-augroup ws
+augroup whitespace
 	autocmd!
 	autocmd BufWritePre *.c,*.cpp,*.php,*.py,*.js,*.txt,*.sh,*.java,*.md,*.Rmd
 				\ :call StripTrailingWhitespaces()
@@ -89,8 +89,13 @@ nnoremap k gk
 " quick-save
 nnoremap <leader><leader> <esc>:w<cr><esc>
 
-" rmarkdown export as pdf
-autocmd FileType rmarkdown nnoremap <leader>e <esc>:w<cr><esc>:RMarkdown pdf<esc>
+" rmarkdown export as pdf and spell correct
+augroup rmd
+	autocmd!
+	autocmd BufRead,BufNewFile *.Rmd nnoremap <leader>e
+				\ <esc>:w<cr><esc>:RMarkdown pdf<esc>
+	autocmd BufRead,BufNewFile *.md,*.Rmd, setlocal spell spelllang=en_au
+augroup end
 
 " disable ex-mode
 nnoremap Q <Nop>
@@ -120,14 +125,17 @@ function! StripTrailingWhitespaces()
 	call cursor(l, c)
 endfunction
 
-" spell correct automatically
-autocmd BufRead,BufNewFile *.md,*.Rmd,*.rmd setlocal spell spelllang=en_au
-
 " Ctrl-j/k deletes blank line below/above, and Alt-j/k inserts.
 nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent><A-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent><A-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
+
+" File skeletons
+augroup templates
+	autocmd!
+	autocmd BufNewFile *.Rmd 0r ~/.vim/templates/skeleton.Rmd
+augroup end
 
 " Plugins
 
