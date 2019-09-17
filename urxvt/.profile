@@ -20,3 +20,6 @@ fi
 # Modifying PATH variable
 PATH=$PATH:~/anaconda3/bin
 PATH=$PATH:/opt/tinytex/bin/x86_64-linux
+
+# Make file viewers acknowledge special characters in file names
+export LC_COLLATE=C
