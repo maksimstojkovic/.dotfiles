@@ -1,6 +1,6 @@
 ---
 title: ""
-author: ""
+author: \emph{}
 date: ""
 output: pdf_document
 ---
