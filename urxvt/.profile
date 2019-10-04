@@ -23,3 +23,6 @@ PATH=$PATH:/opt/tinytex/bin/x86_64-linux
 
 # Make file viewers acknowledge special characters in file names
 export LC_COLLATE=C
+
+# Update media key keybinds
+xbindkeys

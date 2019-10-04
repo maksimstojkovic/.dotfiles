@@ -326,7 +326,7 @@ bar {
 	position bottom
 
 ## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
-#	tray_output primary
+	tray_output primary
 #	tray_output eDP1
 
 	bindsym button4 nop
@@ -420,6 +420,9 @@ mode "$mode_gaps_outer" {
 
 # Autostart Programs
 exec --no-startup-id /usr/bin/syncthing -no-browser
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
+exec --no-startup-id redshift-gtk
+exec --no-startup-id numlockx
 
 # Custom keybinds
 bindsym $mod+Print --release exec --no-startup-id maim -su | xclip -selection clipboard -t image/png
