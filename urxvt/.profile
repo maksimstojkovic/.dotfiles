@@ -14,12 +14,18 @@ fi
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+	PATH="$HOME/bin:$PATH"
 fi
 
 # Modifying PATH variable
-PATH=$PATH:~/anaconda3/bin
-PATH=$PATH:/opt/tinytex/bin/x86_64-linux
+if [ -d "$HOME/anaconda3/bin" ] ; then
+	PATH="$PATH:$HOME/anaconda3/bin"
+fi
+
+if [ -d "/opt/tinytex/bin/x86_64-linux" ] ; then
+	PATH="$PATH:/opt/tinytex/bin/x86_64-linux"
+fi
+
 
 # Make file viewers acknowledge special characters in file names
 export LC_COLLATE=C
