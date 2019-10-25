@@ -60,7 +60,7 @@ Xcursor.size:                     0
 ! URxvt.font:                       xft:TerminessTTFNerdFontMono
 !!xft:xos4 Terminess Powerline:pixelsize=18:Bold:antialias=true,
 !,xft:TerminessTTFNerdFontMono:size=16
-URxvt.font:                        -xos4-terminus-bold-r-normal--20-200-72-72-c-100-iso10646-1,xft:TerminessTTFNerdFontMono,xft:DejaVu Sans:pixelsize=14,xft:Symbola,xft:Noto Emoji:minspace=False
+URxvt.font:                       -xos4-terminus-bold-r-normal--24-240-72-72-c-120-iso10646-1,xft:TerminessTTFNerdFontMono,xft:DejaVu Sans:pixelsize=14,xft:Symbola,xft:Noto Emoji:minspace=False
 !!terminal.font:                    xft:TerminessTTFNerdFontMono:size=18
 
 ! alternative font settings with 'terminus':
