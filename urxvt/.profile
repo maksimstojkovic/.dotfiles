@@ -25,4 +25,4 @@ PATH=$PATH:/opt/tinytex/bin/x86_64-linux
 export LC_COLLATE=C
 
 # Update media key keybinds
-xbindkeys
+# xbindkeys &

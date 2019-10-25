@@ -56,7 +56,7 @@ set synmaxcol=512
 
 " show line numbers
 set number
-set relativenumber
+" set relativenumber
 
 " highlight cursor
 set cursorline
