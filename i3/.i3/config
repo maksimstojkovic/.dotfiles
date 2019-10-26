@@ -60,8 +60,9 @@ bindsym $mod+F2 exec firefox
 bindsym $mod+F3 exec pcmanfm
 bindsym $mod+Shift+F3 exec gksu pcmanfm
 bindsym $mod+F4 exec terminal -e 'ranger'
-bindsym $mod+F5 exec firefox localhost:8384
-bindsym $mod+F6 exec terminal -e 'mocp'
+bindsym $mod+F5 exec syncthing -browser-only
+bindsym $mod+F6 exec windows
+bindsym $mod+F7 exec terminal -e 'mocp'
 bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
