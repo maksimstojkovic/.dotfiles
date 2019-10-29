@@ -36,3 +36,5 @@ systemctl --user start ssh-agent
 ```
 
 'AddKeysToAgent yes' should also be added to individual hosts in `~/.ssh/config`
+
+https://unix.stackexchange.com/questions/381360/nautilus-accels-on-debian-9-gnome-3-22-3
