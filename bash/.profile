@@ -33,6 +33,10 @@ if [ -d "/opt/tinytex/bin/x86_64-linux" ] ; then
 	PATH="$PATH:/opt/tinytex/bin/x86_64-linux"
 fi
 
+if [ -d "/opt/balena-cli" ] ; then
+	PATH="$PATH:/opt/balena-cli"
+fi
+
 # Make file viewers acknowledge special characters in file names
 export LC_COLLATE=C
 

@@ -21,9 +21,9 @@ set infercase
 set backspace=indent,eol,start
 
 " indentation settings
-set shiftwidth=4
-set tabstop=4
-set softtabstop=4
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
 set noexpandtab
 set autoindent
 set smartindent " might have to remove
@@ -90,12 +90,12 @@ nnoremap k gk
 nnoremap <leader><leader> <esc>:w<cr><esc>
 
 " rmarkdown export as pdf and spell correct
-augroup rmd
-	autocmd!
-	autocmd BufRead,BufNewFile *.Rmd nnoremap <leader>e
-				\ <esc>:w<cr><esc>:RMarkdown pdf<esc>
-	autocmd BufRead,BufNewFile *.md,*.Rmd, setlocal spell spelllang=en_au
-augroup end
+" augroup rmd
+" 	autocmd!
+" 	autocmd BufRead,BufNewFile *.Rmd nnoremap <leader>e
+" 				\ <esc>:w<cr><esc>:RMarkdown pdf<esc>
+" 	autocmd BufRead,BufNewFile *.md,*.Rmd, setlocal spell spelllang=en_au
+" augroup end
 
 " disable ex-mode
 nnoremap Q <Nop>
