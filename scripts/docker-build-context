@@ -1,0 +1,13 @@
+#!/bin/bash
+echo Build Context for "$PWD":
+
+docker image build -t build-context -f - "$PWD" <<EOF
+FROM busybox
+COPY . /build-context
+WORKDIR /build-context
+CMD find .
+EOF
+
+echo
+echo Contents of Build Context:
+docker container run --rm build-context

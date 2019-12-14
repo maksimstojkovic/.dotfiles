@@ -24,7 +24,8 @@ set backspace=indent,eol,start
 set shiftwidth=2
 set tabstop=2
 set softtabstop=2
-set noexpandtab
+" set noexpandtab
+set expandtab
 set autoindent
 set smartindent " might have to remove
 
