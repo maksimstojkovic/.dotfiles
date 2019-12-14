@@ -10,7 +10,7 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# set PATH so it includes user's private bin if it exists
+# update PATH
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
@@ -19,12 +19,10 @@ if [ -d "$HOME/.bin" ] ; then
 	PATH="$HOME/.bin:$PATH"
 fi
 
-# set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# set PATH so it includes anaconda and tinytex binaries if they exist
 if [ -d "$HOME/anaconda3/bin" ] ; then
 	PATH="$PATH:$HOME/anaconda3/bin"
 fi
@@ -33,8 +31,8 @@ if [ -d "/opt/tinytex/bin/x86_64-linux" ] ; then
 	PATH="$PATH:/opt/tinytex/bin/x86_64-linux"
 fi
 
-if [ -d "/opt/balena-cli" ] ; then
-	PATH="$PATH:/opt/balena-cli"
+if [ -d "$HOME/.dotfiles/scripts" ] ; then
+	PATH="$PATH:$HOME/.dotfiles/scripts"
 fi
 
 # Make file viewers acknowledge special characters in file names
