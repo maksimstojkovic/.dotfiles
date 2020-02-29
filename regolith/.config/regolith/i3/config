@@ -343,3 +343,6 @@ exec --no-startup-id /usr/bin/unclutter -b
 # Screenshot
 bindsym $mod+Shift+s --release exec --no-startup-id maim -su | xclip -selection clipboard -t image/png
 bindsym $mod+Print --release exec --no-startup-id maim -su ~/Pictures/$(date +%y%m%d_%H%M%S).png
+
+exec --no-startup-id nextcloud
+for_window [class="Nextcloud"] move scratchpad
