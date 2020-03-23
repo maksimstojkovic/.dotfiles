@@ -78,6 +78,8 @@ echo "INSTALLING VIM PLUGINS DONE"
 
 echo "SETTING UP VIM R-MARKDOWN"
 R --no-save << EOF
+install.packages("rmarkdown")
+install.packages("reticulate")
 install.packages("tinytex")
 tinytex::install_tinytex(dir = "${tinytex_opt}")
 EOF
